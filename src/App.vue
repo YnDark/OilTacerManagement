@@ -13,11 +13,18 @@ export default {
     Layout,
   },
   mounted(){
+    
+    //获取全部数据
     axios.get('http://localhost:8002/info').then((res)=>{
-      console.log(this.$store.state.tab.isCollapse);
-      console.log(res);
       this.$store.state.activity.data = res.data;
-      console.log(this.$store.state.activity.data);
+    }).catch(function(error){
+      console.log(error);
+    });
+
+    //获取全部日期
+    axios.get('http://localhost:8002/date').then((res)=>{
+      this.$store.state.activity.date = res.data;
+      console.log(res.data);
     }).catch(function(error){
       console.log(error);
     });

@@ -16,7 +16,34 @@ export default {
     ChangeButtonVue
   },
   data(){
+
+    //处理日期
+    let temp = this.$store.state.activity.data;
+    let tempdate = this.$store.state.activity.date;
+    let fullyear = [];
+    fullyear[0] = 'product';
+    let x = 1;
+    for(let i in tempdate){
+      let year = new Date(tempdate[i].Date).getFullYear().toString();
+      let month = (new Date(tempdate[i].Date).getMonth() + 1).toString();
+      let strDate = new Date(tempdate[i].Date).getDate().toString();
+      fullyear[x] = year+"-"+month+"-"+strDate;
+      x++;
+    }
+    console.log(fullyear);
+
+    //处理数据个数
+    let series = [];
+    for(let i in tempdate){
+      series[i] = { type: 'bar' };
+    }
+
+    //处理具体数据
+    let allData = [];
+    
     return{
+      series,
+      fullyear,
       isShow:true
     }
   },
@@ -31,10 +58,6 @@ export default {
 			pubsub.unsubscribe(this.pubId)
   },
   computed:{
-    date(){
-      return {
-      }
-    },
     showdata(){},
     option1(){
       return {
@@ -42,18 +65,17 @@ export default {
         tooltip: {},
         dataset: {
           source: [
-            ['product', '2015', '2016', '2017'],
-            ['Matcha Latte', 43.3, 85.8, 93.7],
-            ['Milk Tea', 83.1, 73.4, 55.1],
-            ['Cheese Cocoa', 86.4, 65.2, 82.5],
-            ['Walnut Brownie', 72.4, 53.9, 39.1]
+            //['product', '2015', '2016', '2017'],
+            this.fullyear,
+            ['Matcha Latte', 43.3, 85.8],
+            ['Milk Tea', 83.1, 73.4],
+            ['Cheese Cocoa', 86.4, 65.2],
+            ['Walnut Brownie', 72.4, 53.9]
           ]
         },
         xAxis: { type: 'category' },
         yAxis: {},
-        // Declare several bar series, each will be mapped
-        // to a column of dataset.source by default.
-        series: [{ type: 'bar' }, { type: 'bar' }, { type: 'bar' }]
+        series: this.series
       };
     },
     option2(){

@@ -1,6 +1,7 @@
 export default {
     state: {
-        data:[]//所有油田信息
+        data:[],//所有油田信息
+        date:[]//所有日期
     },
     mutations: {
         handleEdit(index, row) {

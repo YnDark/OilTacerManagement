@@ -21,6 +21,12 @@ export default {
       }).catch(function(error){
         console.log(error);
       });
+      axios.get('http://localhost:8002/Date').then(function(res){
+        console.log(res);
+        alert(res.data);
+      }).catch(function(error){
+        console.log(error);
+      });
     }
   }
 }

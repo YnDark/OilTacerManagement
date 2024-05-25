@@ -6,8 +6,8 @@
         v-model="value2"
         active-color="#13ce66"
         inactive-color="#ff4949"
-        active-text="以日期为横坐标"
-        inactive-text="以段号为横坐标">
+        active-text="以段号为横坐标"
+        inactive-text="以日期为横坐标">
         </el-switch>
     </div>
 </template>

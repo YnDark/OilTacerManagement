@@ -15,6 +15,18 @@ const getAllData = () => {
     })
   })
 }
+//查询所有日期
+const getDate = () => {
+  return new Promise((resolve, reject) => {
+    //第一个参数：sql语句
+    //第二个参数：回调函数（err：查询错误，data：查询结果）
+    connection.query("select distinct Date from oildata",(err,data) => {
+      if(err!=null) reject(err);
+      resolve(data)
+      //reject(err);
+    })
+  })
+}
 //添加
 const insertData = (param) => {
   return new Promise((resolve,reject) => {
@@ -47,5 +59,6 @@ module.exports = {
   getAllData,
   insertData,
   updateData,
-  deleteData
+  deleteData,
+  getDate
 }

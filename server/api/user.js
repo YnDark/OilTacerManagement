@@ -3,15 +3,27 @@ const {
     getAllData,
     insertData,
     updateData,
-    deleteData} = require('../database/api')
+    deleteData,
+    getDate} = require('../database/api')
 const express = require('express');
 const db = require('mssql');
 const router = express.Router();
  
 /* GET home page. */
+//获取全部数据
 router.get('/info', function (req, res) {
     console.log('hello world');
     getAllData().then(response=>{
+        res.send(response);
+    }).catch(err=>{                                                                                                                                                                                                                                                                                                                                                                                                                 
+        res.send(err);
+        console.log(err);
+    });
+});
+//获取全部日期
+router.get('/date', function (req, res) {
+    console.log('getting date');
+    getDate().then(response=>{
         res.send(response);
     }).catch(err=>{                                                                                                                                                                                                                                                                                                                                                                                                                 
         res.send(err);
