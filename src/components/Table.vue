@@ -1,19 +1,12 @@
 <template>
   <el-table
     :data="tableData"
+    :default-sort = "{prop: 'date', order: 'descending'}"
     style="width: 100%">
-    <el-table-column
+      <el-table-column
       min-width="50"
       prop="segment"
-      label="序号"
-      width="100">
-      <template slot-scope="scope">
-        <span style="margin-left: 10px">{{ scope.$index + 1 }}</span>
-      </template>
-    </el-table-column>
-        <el-table-column
-      min-width="50"
-      prop="segment"
+      sortable
       label="段号"
       width="100">
       <template slot-scope="scope">
@@ -35,18 +28,17 @@
       prop="oilCol"
       width="300">
       <template slot-scope="scope">
-        <i class="el-icon-time"></i>
         <span style="margin-left: 10px">{{ scope.row.OilCol }}</span>
       </template>
     </el-table-column>
     <el-table-column
+      :filters = allDate
+      :filter-method="filterHandler"
+      :formatter="formatter"
       min-width="50"
       label="日期"
       prop="date"
       width="300">
-      <template slot-scope="scope">
-        <span style="margin-left: 10px">{{ scope.row.Date }}</span>
-      </template>
     </el-table-column>
     <el-table-column label="操作" min-width="300">
       <template slot-scope="scope">
@@ -72,6 +64,23 @@
         tableData: this.$store.state.activity.data
       }
     },
+    computed:{
+      allDate(){
+        let tempdate = this.$store.state.activity.date;
+        let showDate = [];
+        for(let i in tempdate){
+          let year = new Date(tempdate[i].Date).getFullYear().toString();
+          let month = (new Date(tempdate[i].Date).getMonth() + 1).toString();
+          let strDate = new Date(tempdate[i].Date).getDate().toString();
+          showDate[i] = {
+            text:year+"-"+month+"-"+strDate,
+            value:year+"-"+month+"-"+strDate
+          };
+        }
+        console.log(showDate);
+        return showDate;
+      }
+    },
     methods: {
       handleEdit(index, row) {
         console.log(index, row);
@@ -82,6 +91,18 @@
       indexMethod(index) {
         return index;
       },
+      resetDateFilter() {
+        this.$refs.filterTable.clearFilter('date');
+      },
+      clearFilter() {
+        this.$refs.filterTable.clearFilter();
+      },
+      formatter(row, column) {
+        return `${new Date(row.Date).getFullYear()}-${new Date(row.Date).getMonth()+1}-${new Date(row.Date).getDate()}`;
+      },
+      filterHandler(value, row, column) {
+        return `${new Date(row.Date).getFullYear()}-${new Date(row.Date).getMonth()+1}-${new Date(row.Date).getDate()}`.toString() === value;
+      }
     }
   }
 </script>

@@ -1,4 +1,4 @@
-# admin
+# 调试命令
 
 ## Project setup
 ```
