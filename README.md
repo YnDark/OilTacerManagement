@@ -4,6 +4,8 @@
 ```
 npm install
 ```
+### run electron
+npm run start
 
 ### Compiles and hot-reloads for development
 ```
