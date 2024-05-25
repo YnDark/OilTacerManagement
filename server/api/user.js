@@ -4,6 +4,7 @@ const {
     insertData,
     updateData,
     deleteData,
+    getSegment,
     getDate} = require('../database/api')
 const express = require('express');
 const db = require('mssql');
@@ -24,6 +25,16 @@ router.get('/info', function (req, res) {
 router.get('/date', function (req, res) {
     console.log('getting date');
     getDate().then(response=>{
+        res.send(response);
+    }).catch(err=>{                                                                                                                                                                                                                                                                                                                                                                                                                 
+        res.send(err);
+        console.log(err);
+    });
+});
+//获取全部段号
+router.get('/segment', function (req, res) {
+    console.log('getting segment');
+    getSegment().then(response=>{
         res.send(response);
     }).catch(err=>{                                                                                                                                                                                                                                                                                                                                                                                                                 
         res.send(err);

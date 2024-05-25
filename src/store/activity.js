@@ -1,7 +1,8 @@
 export default {
     state: {
         data:[],//所有油田信息
-        date:[]//所有日期
+        date:[],//所有日期
+        segment:[]//所有段号
     },
     mutations: {
         handleEdit(index, row) {

@@ -13,7 +13,7 @@ export default {
     Layout,
   },
   mounted(){
-    
+
     //获取全部数据
     axios.get('http://localhost:8002/info').then((res)=>{
       this.$store.state.activity.data = res.data;
@@ -24,6 +24,13 @@ export default {
     //获取全部日期
     axios.get('http://localhost:8002/date').then((res)=>{
       this.$store.state.activity.date = res.data;
+    }).catch(function(error){
+      console.log(error);
+    });
+
+    //获取全部段号
+    axios.get('http://localhost:8002/segment').then((res)=>{
+      this.$store.state.activity.segment = res.data;
       console.log(res.data);
     }).catch(function(error){
       console.log(error);

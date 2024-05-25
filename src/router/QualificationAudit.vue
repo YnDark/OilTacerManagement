@@ -16,10 +16,15 @@ export default {
     ChangeButtonVue
   },
   data(){
+    //总数据
+    let source = [];//二维数组，第一行为横轴，其他未数据
 
-    //处理日期
+    //初始化数据
     let temp = this.$store.state.activity.data;
     let tempdate = this.$store.state.activity.date;
+    let segment = this.$store.state.activity.segment;
+
+    //处理日期
     let fullyear = [];
     fullyear[0] = 'product';
     let x = 1;
@@ -30,7 +35,14 @@ export default {
       fullyear[x] = year+"-"+month+"-"+strDate;
       x++;
     }
-    console.log(fullyear);
+    source[0] = fullyear;
+
+    //处理段号
+    for(let i in segment){
+      source[parseInt(i)+1] = [];
+      source[parseInt(i)+1][0] = segment[i].segment.toString();
+    }
+    console.log(source);
 
     //处理数据个数
     let series = [];
@@ -40,10 +52,25 @@ export default {
 
     //处理具体数据
     let allData = [];
-    
+    for(let i in temp){
+      //日期相同
+      for(let k in tempdate){
+        if(temp[i].Date === tempdate[k].Date){
+          //日期相同
+          for(let j in segment){
+            if(temp[i].segment === segment[j].segment){
+            //段号相同
+            console.log(temp[i]);
+            source[parseInt(j)+1][parseInt(k)+1]=temp[i].OilCol;
+            }
+          }
+        }
+      }
+    }
+    console.log(source);
     return{
       series,
-      fullyear,
+      source,
       isShow:true
     }
   },
@@ -64,14 +91,15 @@ export default {
         legend: {},
         tooltip: {},
         dataset: {
-          source: [
+          /*source: [
             //['product', '2015', '2016', '2017'],
             this.fullyear,
             ['Matcha Latte', 43.3, 85.8],
             ['Milk Tea', 83.1, 73.4],
             ['Cheese Cocoa', 86.4, 65.2],
             ['Walnut Brownie', 72.4, 53.9]
-          ]
+          ]*/
+          source:this.source
         },
         xAxis: { type: 'category' },
         yAxis: {},
@@ -90,6 +118,7 @@ export default {
             ['Cheese Cocoa', 86.4, 65.2, 82.5],
             ['Walnut Brownie', 72.4, 53.9, 39.1]
           ]
+          //source:source
         },
         xAxis: { type: 'category' },
         yAxis: {},
