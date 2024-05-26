@@ -79,4 +79,34 @@ router.post("/insert",urlencodedParser,function(req,res){
         console.log(err);
     });
 });
+
+router.post("/delete",urlencodedParser,function(req,res){
+    console.log('deleting');
+    console.log(req.body);
+    const segment = req.body.params.segment;
+    const oilCol = req.body.params.OilCol;
+    const waterCol = req.body.params.WaterCol;
+    const date = req.body.params.Date;
+    let year = new Date(date).getFullYear().toString();
+    let month = (new Date(date).getMonth() + 1).toString();
+    let strDate = new Date(date).getDate().toString();
+    let allDate = year+"-"+month+"-"+strDate;
+    const obj = {
+        segment:segment,
+        oilCol:oilCol,
+        waterCol:waterCol,
+        date:allDate
+    }
+    console.log(obj)
+    deleteData(obj).then(response=>{
+        res.send({
+            status:0,
+            msg:"请求成功",
+            data:req.body
+        });
+    }).catch(err=>{                                                                                                                                                                                                                                                                                                                                                                                                                 
+        res.send(err);
+        console.log(err);
+    });
+});
 module.exports = router;

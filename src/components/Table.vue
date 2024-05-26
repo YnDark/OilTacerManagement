@@ -57,6 +57,7 @@
 </template>
 
 <script>
+import axios from 'axios';
   export default {
     name:"Table",
     data() {
@@ -86,7 +87,31 @@
         console.log(index, row);
       },
       handleDelete(index, row) {
+        for(let i in this.$store.state.activity.data){
+          if(this.$store.state.activity.data[i].segment === row.segment && this.$store.state.activity.data[i].Date === row.Date){
+            this.$store.state.activity.data.splice(i, 1);
+            break;
+          }
+        }
         console.log(index, row);
+        console.log({
+                Date:row.Date,
+                OilCol:row.OilCol.toString(),
+                WaterCol:row.WaterCol.toString(),
+                segment:row.segment.toString(),
+          })
+        axios.post('http://localhost:8002/delete',{
+            params:{
+                Date:row.Date,
+                OilCol:row.OilCol.toString(),
+                WaterCol:row.WaterCol.toString(),
+                segment:row.segment.toString(),
+          }}
+          ).then((res)=>{
+            console.log(res.data);
+          }).catch(function(error){
+          console.log(error);
+          });
       },
       indexMethod(index) {
         return index;

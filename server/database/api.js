@@ -52,18 +52,18 @@ const insertData = (obj) => {
 //改
 const updateData = (param) => {
   return new Promise((resolve,reject) => {
-    connection.query(`update account set ${WaterCol = param.WaterCol} ${oilCol = param.WaterCol} where phone = ?`,param,(err,data) => {
+    connection.query(`update account set ${WaterCol = param.WaterCol} ${oilCol = param.WaterCol} where phone = ?`,(err,data) => {
       //如果err为null则成功
       if(err!=null) reject(err);
       resolve(data)
     })
   })
 }
-
 //删除
-const deleteData = (param) => {
+const deleteData = (obj) => {
   return new Promise((resolve,reject) => {
-    connection.query("delete from account where segment = ?",param,(err,data) => {
+    connection.query(`delete from oildata where segment = '${obj.segment}' AND Date = '${obj.date}'`,(err,data) => {
+      if(err!=null) reject(err);
       resolve(data)
     })
   })
