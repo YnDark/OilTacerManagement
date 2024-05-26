@@ -40,19 +40,21 @@ const getSegment = () => {
   })
 }
 //添加
-const insertData = (param) => {
+const insertData = (obj) => {
   return new Promise((resolve,reject) => {
-    connection.query(`insert into oildata(WaterCol,oilCol,segment,Date) values(${param.WaterCol},${param.oilCol},${param.segment},${param.Date})`,param,(err,data) => {
+    connection.query(`insert into oildata(WaterCol,oilCol,segment,Date) values('${obj.waterCol}','${obj.oilCol}','${obj.segment}','${obj.date}')`,(err,data) => {
       //如果err为null则成功
+      if(err!=null) reject(err);
       resolve(data)
     })
-  })
+})
 }
 //改
 const updateData = (param) => {
   return new Promise((resolve,reject) => {
     connection.query(`update account set ${WaterCol = param.WaterCol} ${oilCol = param.WaterCol} where phone = ?`,param,(err,data) => {
       //如果err为null则成功
+      if(err!=null) reject(err);
       resolve(data)
     })
   })

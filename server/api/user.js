@@ -44,14 +44,39 @@ router.get('/segment', function (req, res) {
 
 
 const bodyParser=require("body-parser");
-const { response } = require('express');
  
 // 解析以 application/json 和 application/x-www-form-urlencoded 提交的数据
-const jsonParser = bodyParser.json();
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
+const connection = require('../database/db')
 
-router.post("/info",urlencodedParser,function(req,res){
-    console.log('hello post');
-	res.send(req.body);
+router.post("/insert",urlencodedParser,function(req,res){
+    console.log('inserting');
+    console.log(req.body);
+    const segment = req.body.params.segment;
+    const oilCol = req.body.params.OilCol;
+    const waterCol = req.body.params.WaterCol;
+    const date = req.body.params.Date;
+    let year = new Date(date).getFullYear().toString();
+    let month = (new Date(date).getMonth() + 1).toString();
+    let strDate = new Date(date).getDate().toString();
+    let allDate = year+"-"+month+"-"+strDate;
+    const obj = {
+        segment:segment,
+        oilCol:oilCol,
+        waterCol:waterCol,
+        date:allDate
+    }
+    console.log(obj)
+    console.log(`insert into oildata(WaterCol,oilCol,segment,Date) values('${obj.waterCol}','${obj.oilCol}','${obj.segment},${obj.date}')`);
+    insertData(obj).then(response=>{
+        res.send({
+            status:0,
+            msg:"请求成功",
+            data:req.body
+        });
+    }).catch(err=>{                                                                                                                                                                                                                                                                                                                                                                                                                 
+        res.send(err);
+        console.log(err);
+    });
 });
 module.exports = router;

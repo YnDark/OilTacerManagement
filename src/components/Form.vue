@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import axios from 'axios';
   export default {
     data() {
       var checkSegment = (rule, value, callback) => {
@@ -112,20 +113,27 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            console.log({
-                Date:new Date(this.ruleForm.date),
-                oilCol:this.ruleForm.oilCol.toString(),
-                waterCol:this.ruleForm.waterCol.toString(),
-                segment:this.ruleForm.segment.toString(),
-            });
-            this.$store.state.activity.data.push({
+            let newobj = {
                 Date:new Date(this.ruleForm.date),
                 OilCol:this.ruleForm.oilCol.toString(),
                 WaterCol:this.ruleForm.waterCol.toString(),
                 segment:this.ruleForm.segment.toString(),
-            });
-            
+            }
+            this.$store.state.activity.data.push(newobj);
+
             this.$message('添加成功');
+            axios.post('http://localhost:8002/insert',{
+                params:{
+                    Date:new Date(this.ruleForm.date),
+                    OilCol:this.ruleForm.oilCol.toString(),
+                    WaterCol:this.ruleForm.waterCol.toString(),
+                    segment:this.ruleForm.segment.toString(),
+                }}
+                ).then((res)=>{
+                console.log(res.data);
+            }).catch(function(error){
+                console.log(error);
+            });
             this.ruleForm.segment = "";
             this.ruleForm.oilCol = "";
             this.ruleForm.waterCol = "";
