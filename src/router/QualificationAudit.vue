@@ -36,13 +36,11 @@ export default {
       x++;
     }
     source[0] = fullyear;
-
     //处理段号
     for(let i in segment){
-      source[parseInt(i)+1] = [];
+      source[parseInt(i)+1] = new Array(fullyear.length).fill(0);
       source[parseInt(i)+1][0] = segment[i].segment.toString();
     }
-    console.log(source);
 
     //处理数据个数
     let series = [];
@@ -59,14 +57,13 @@ export default {
           for(let j in segment){
             if(temp[i].segment === segment[j].segment){
             //段号相同
-            source[parseInt(k)+1][parseInt(j)+1]=temp[i].OilCol;
+            source[parseInt(j)+1][parseInt(k)+1]=temp[i].OilCol;
             }
           }
         }
       }
     }
     console.log(source);
-
     //第二个图的数据
     let source2 = [];//二维数组，第一行为横轴，其他未数据
 
@@ -78,9 +75,14 @@ export default {
     }
     source2[0] = s;
 
+    //处理个数
+    let series2 = [];
+    for(let i in segment){
+      series2[i] = { type: 'bar' };
+    }
     //处理日期
     for(let i in tempdate){
-      source2[parseInt(i)+1] = [];
+      source2[parseInt(i)+1] = new Array(s.length).fill(0);
       let year = new Date(tempdate[i].Date).getFullYear().toString();
       let month = (new Date(tempdate[i].Date).getMonth() + 1).toString();
       let strDate = new Date(tempdate[i].Date).getDate().toString();
@@ -94,18 +96,42 @@ export default {
           for(let j in segment){
             if(temp[i].segment === segment[j].segment){
             //段号相同
-            source2[parseInt(j)+1][parseInt(k)+1]=temp[i].OilCol;
+            source2[parseInt(k)+1][parseInt(j)+1]=temp[i].OilCol;
             }
           }
         }
       }
     }
-        console.log(source2);
+    console.log(source2);
+
+    //检查数据异常值和缺失值
+    /*let len = source[0].length;
+    for(let i=1 ; i<len ;i++){
+      for(let j=0 ; j<len ;j++){
+        console.log(typeof (source[i][j]));
+        if(source[i][j]){
+          source[i][j] = 0;
+          console.log(source[i][j])
+        }
+      }
+    }
+
+    let len2 = source2[0].length;
+    for(let i=1 ; i<len2 ;i++){
+      for(let j=0 ; j<len2 ;j++){
+        console.log(source2[i][j]);
+        if(source2[i][j]){
+          source2[i][j] = 0;
+          console.log(source2[i][j])
+        }
+      }
+    }*/
 
     return{
       source2,
       series,
       source,
+      series2,
       isShow:true
     }
   },
@@ -157,7 +183,7 @@ export default {
         },
         xAxis: { type: 'category' },
         yAxis: {},
-        series: this.series
+        series: this.series2
       };
     }
   }

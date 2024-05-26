@@ -1,17 +1,19 @@
 <template>
   <div>
     <TopTab></TopTab>
-    <button @click="show">fasong</button>
+    <Form></Form>
   </div>
 </template>
 
 <script>
 import axios from "axios"
 import TopTab from '../components/TopTab.vue'
+import  Form from '../components/Form.vue'
 export default {
   name: 'ActivityAudit',
   components: {
-    TopTab
+    TopTab,
+    Form
   },
   methods:{
     show(){
@@ -32,5 +34,5 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less" scoped>
 </style>

@@ -17,6 +17,7 @@ export default {
     //获取全部数据
     axios.get('http://localhost:8002/info').then((res)=>{
       this.$store.state.activity.data = res.data;
+      console.log(res.data);
     }).catch(function(error){
       console.log(error);
     });

@@ -109,5 +109,6 @@
 <style lang="less" scoped>
   .el-table{
     overflow: hidden;
+    margin-bottom: 50px;
   }
 </style>
