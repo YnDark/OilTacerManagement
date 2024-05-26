@@ -4,7 +4,9 @@ export default {
         date:[],//所有日期
         segment:[],//所有段号
         source:[],//图1信息
-        source2:[]//图2信息
+        source2:[],//图2信息
+        series:[],
+        series2:[],
     },
     mutations: {
         handleEdit(index, row) {

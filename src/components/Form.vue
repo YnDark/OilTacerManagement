@@ -124,6 +124,7 @@
                 WaterCol:this.ruleForm.waterCol.toString(),
                 segment:this.ruleForm.segment.toString(),
             });
+            
             this.$message('添加成功');
             this.ruleForm.segment = "";
             this.ruleForm.oilCol = "";

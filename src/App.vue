@@ -12,8 +12,7 @@ export default {
   components: {
     Layout,
   },
-  mounted(){
-
+  beforeMount(){
     //获取全部数据
     axios.get('http://localhost:8002/info').then((res)=>{
       this.$store.state.activity.data = res.data;
@@ -36,6 +35,8 @@ export default {
     }).catch(function(error){
       console.log(error);
     });
+  },
+  mounted(){
   }
 }
 const debounce = (fn, delay) => {

@@ -7,7 +7,6 @@
 </template>
 
 <script>
-
 import pubsub from 'pubsub-js'
 import ChangeButtonVue from '../components/ChangeButton.vue';
 export default {
@@ -15,10 +14,24 @@ export default {
   components: {
     ChangeButtonVue
   },
+  watch: {
+    '$route': {
+      immediate: true,
+      handler(to, from) {
+        // 在路由变化时执行重新创建组件的操作
+        this.$destroy();
+        this.$router.push(to.path);
+      }
+    }
+  },
   data(){
+    return{
+      isShow:true
+    }
+  },
+  beforeMount(){
     //总数据
     let source = [];//二维数组，第一行为横轴，其他未数据
-
     //初始化数据
     let temp = this.$store.state.activity.data;
     let tempdate = this.$store.state.activity.date;
@@ -32,20 +45,20 @@ export default {
       let year = new Date(tempdate[i].Date).getFullYear().toString();
       let month = (new Date(tempdate[i].Date).getMonth() + 1).toString();
       let strDate = new Date(tempdate[i].Date).getDate().toString();
-      fullyear[x] = year+"-"+month+"-"+strDate;
+      this.$set(fullyear,x,year+"-"+month+"-"+strDate);
       x++;
     }
     source[0] = fullyear;
     //处理段号
     for(let i in segment){
       source[parseInt(i)+1] = new Array(fullyear.length).fill(0);
-      source[parseInt(i)+1][0] = segment[i].segment.toString();
+      this.$set(source[parseInt(i)+1],0,segment[i].segment.toString());
     }
 
     //处理数据个数
     let series = [];
     for(let i in tempdate){
-      series[i] = { type: 'bar' };
+      this.$set(series,i,{ type: 'bar' });
     }
 
     //处理具体数据
@@ -57,13 +70,17 @@ export default {
           for(let j in segment){
             if(temp[i].segment === segment[j].segment){
             //段号相同
-            source[parseInt(j)+1][parseInt(k)+1]=temp[i].OilCol;
+            this.$set(source[parseInt(j)+1],parseInt(k)+1,temp[i].OilCol);
             }
           }
         }
       }
     }
+    this.$store.state.activity.series = series;
+    this.$store.state.activity.source = source;
     console.log(source);
+    console.log(this.$store.state.activity.source)
+
     //第二个图的数据
     let source2 = [];//二维数组，第一行为横轴，其他未数据
 
@@ -71,14 +88,14 @@ export default {
     let s = [];
     s[0] = 'product';
     for(let i in segment){
-      s[parseInt(i)+1] = segment[i].segment.toString();
+      this.$set(s,parseInt(i)+1,segment[i].segment.toString());
     }
     source2[0] = s;
 
     //处理个数
     let series2 = [];
     for(let i in segment){
-      series2[i] = { type: 'bar' };
+      this.$set(series2,i,{ type: 'bar' });
     }
     //处理日期
     for(let i in tempdate){
@@ -86,7 +103,7 @@ export default {
       let year = new Date(tempdate[i].Date).getFullYear().toString();
       let month = (new Date(tempdate[i].Date).getMonth() + 1).toString();
       let strDate = new Date(tempdate[i].Date).getDate().toString();
-      source2[parseInt(i)+1][0] = year+"-"+month+"-"+strDate;
+      this.$set(source2[parseInt(i)+1],0,year+"-"+month+"-"+strDate);
     }
     //处理具体数据
     for(let i in temp){
@@ -96,44 +113,16 @@ export default {
           for(let j in segment){
             if(temp[i].segment === segment[j].segment){
             //段号相同
-            source2[parseInt(k)+1][parseInt(j)+1]=temp[i].OilCol;
+            this.$set(source2[parseInt(k)+1],parseInt(j)+1,temp[i].OilCol);
             }
           }
         }
       }
     }
+    this.$store.state.activity.series2 = series2;
+    this.$store.state.activity.source2 = source2;
     console.log(source2);
-
-    //检查数据异常值和缺失值
-    /*let len = source[0].length;
-    for(let i=1 ; i<len ;i++){
-      for(let j=0 ; j<len ;j++){
-        console.log(typeof (source[i][j]));
-        if(source[i][j]){
-          source[i][j] = 0;
-          console.log(source[i][j])
-        }
-      }
-    }
-
-    let len2 = source2[0].length;
-    for(let i=1 ; i<len2 ;i++){
-      for(let j=0 ; j<len2 ;j++){
-        console.log(source2[i][j]);
-        if(source2[i][j]){
-          source2[i][j] = 0;
-          console.log(source2[i][j])
-        }
-      }
-    }*/
-
-    return{
-      source2,
-      series,
-      source,
-      series2,
-      isShow:true
-    }
+    console.log(this.$store.state.activity.source2);
   },
   mounted() {
       // 订阅消息
@@ -146,7 +135,6 @@ export default {
 			pubsub.unsubscribe(this.pubId)
   },
   computed:{
-    showdata(){},
     option1(){
       return {
         legend: {},
@@ -160,11 +148,11 @@ export default {
             ['Cheese Cocoa', 86.4, 65.2],
             ['Walnut Brownie', 72.4, 53.9]
           ]*/
-          source:this.source
+          source:this.$store.state.activity.source
         },
         xAxis: { type: 'category' },
         yAxis: {},
-        series: this.series
+        series: this.$store.state.activity.series
       };
     },
     option2(){
@@ -179,13 +167,15 @@ export default {
             ['Cheese Cocoa', 86.4, 65.2, 82.5],
             ['Walnut Brownie', 72.4, 53.9, 39.1]
           ]*/
-          source:this.source2
+          source:this.$store.state.activity.source2
         },
         xAxis: { type: 'category' },
         yAxis: {},
-        series: this.series2
+        series: this.$store.state.activity.series2
       };
     }
+  },
+  methods:{
   }
 }
 </script>
