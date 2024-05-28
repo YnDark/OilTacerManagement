@@ -49,6 +49,7 @@ const bodyParser=require("body-parser");
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 const connection = require('../database/db')
 
+//插入数据
 router.post("/insert",urlencodedParser,function(req,res){
     console.log('inserting');
     console.log(req.body);
@@ -56,6 +57,8 @@ router.post("/insert",urlencodedParser,function(req,res){
     const oilCol = req.body.params.OilCol;
     const waterCol = req.body.params.WaterCol;
     const date = req.body.params.Date;
+    const waterMess = req.body.params.WaterMess;
+    const oilMess = req.body.params.OilMess;
     let year = new Date(date).getFullYear().toString();
     let month = (new Date(date).getMonth() + 1).toString();
     let strDate = new Date(date).getDate().toString();
@@ -64,10 +67,12 @@ router.post("/insert",urlencodedParser,function(req,res){
         segment:segment,
         oilCol:oilCol,
         waterCol:waterCol,
-        date:allDate
+        date:allDate,
+        waterMess:waterMess,
+        oilMess:oilMess
     }
     console.log(obj)
-    console.log(`insert into oildata(WaterCol,oilCol,segment,Date) values('${obj.waterCol}','${obj.oilCol}','${obj.segment},${obj.date}')`);
+    console.log(`insert into oildata(WaterCol,oilCol,segment,Date,WaterMess,OilMess) values('${obj.waterCol}','${obj.oilCol}','${obj.segment}','${obj.date}','${obj.waterMess}','${obj.oilMess}')`);
     insertData(obj).then(response=>{
         res.send({
             status:0,

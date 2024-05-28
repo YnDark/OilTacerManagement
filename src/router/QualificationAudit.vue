@@ -150,14 +150,47 @@ export default {
           ]*/
           source:this.$store.state.activity.source
         },
-        xAxis: { type: 'category' },
-        yAxis: {},
+        xAxis: { 
+          type: 'category' ,
+          name: '段号' ,
+          nameLocation: 'center',
+          nameTextStyle:{
+            lineHeight:80,
+            fontSize: 20,
+            fontWeight:'bolder'
+          },
+          axisLabel: {
+            lineHeight: 25,
+            fontSize: 18,
+            formatter: '第 {value} 段',
+            align: 'center'
+            // ...
+          }
+        },
+        yAxis: {
+          name: '油浓度' ,
+          nameLocation: 'center',
+          nameTextStyle:{
+            lineHeight:100,
+            fontSize: 20,
+            fontWeight:'bolder'
+          },
+          axisLabel: {
+            lineHeight: 25,
+            fontSize: 18,
+            formatter: '{value} %',
+            align: 'center'
+            // ...
+          }
+        },
         series: this.$store.state.activity.series
       };
     },
     option2(){
       return {
-        legend: {},
+        legend: {
+          formatter: '第 {name} 段'
+        },
         tooltip: {},
         dataset: {
           /*source: [
@@ -169,8 +202,39 @@ export default {
           ]*/
           source:this.$store.state.activity.source2
         },
-        xAxis: { type: 'category' },
-        yAxis: {},
+        xAxis: { 
+          type: 'category' ,
+          name: '日期' ,
+          nameLocation: 'center',
+          nameTextStyle:{
+            lineHeight:80,
+            fontSize: 20,
+            fontWeight:'bolder'
+          },
+          axisLabel: {
+            lineHeight: 25,
+            fontSize: 18,
+            formatter: '{value}',
+            align: 'center'
+            // ...
+          }
+        },
+        yAxis: {
+          name: '油浓度' ,
+          nameLocation: 'center',
+          nameTextStyle:{
+            lineHeight:100,
+            fontSize: 20,
+            fontWeight:'bolder'
+          },
+          axisLabel: {
+            lineHeight: 25,
+            fontSize: 18,
+            formatter: '{value} %',
+            align: 'center'
+            // ...
+          }
+        },
         series: this.$store.state.activity.series2
       };
     }

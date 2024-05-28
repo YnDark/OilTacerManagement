@@ -32,6 +32,24 @@
       </template>
     </el-table-column>
     <el-table-column
+      min-width="50"
+      label="油质量"
+      prop="oilMess"
+      width="300">
+      <template slot-scope="scope">
+        <span style="margin-left: 10px">{{ scope.row.OilMess }}</span>
+      </template>
+    </el-table-column>
+    <el-table-column
+      min-width="50"
+      label="水质量"
+      prop="waterMess"
+      width="300">
+      <template slot-scope="scope">
+        <span style="margin-left: 10px">{{ scope.row.WaterMess }}</span>
+      </template>
+    </el-table-column>
+    <el-table-column
       :filters = allDate
       :filter-method="filterHandler"
       :formatter="formatter"

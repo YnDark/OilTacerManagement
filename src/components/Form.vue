@@ -5,15 +5,27 @@
 
         <el-dialog title="添加数据" :visible.sync="dialogFormVisible">
             <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-            <el-form-item label="段号" prop="pass">
-                <el-input  v-model="ruleForm.segment" autocomplete="off"></el-input>
+
+            <el-form-item label="段号" prop="segment">
+                <el-input  v-model.number="ruleForm.segment" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="油浓度" prop="checkPass">
+
+            <el-form-item label="油浓度" prop="oilCol">
                 <el-input  v-model="ruleForm.oilCol" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="水浓度" prop="age">
-                <el-input v-model.number="ruleForm.waterCol"></el-input>
+
+            <el-form-item label="水浓度" prop="waterCol">
+                <el-input v-model="ruleForm.waterCol"></el-input>
             </el-form-item>
+
+            <el-form-item label="油质量" prop="oilMess">
+                <el-input v-model="ruleForm.oilMess"></el-input>
+            </el-form-item>
+
+            <el-form-item label="水质量" prop="waterMess">
+                <el-input v-model="ruleForm.waterMess"></el-input>
+            </el-form-item>
+
             <el-form-item label="日期">
                 <div class="block">
                     <el-date-picker
@@ -23,6 +35,7 @@
                     </el-date-picker>
                 </div>
             </el-form-item>
+
             </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button type="primary" @click="submitForm('ruleForm')" :plain="true">提交</el-button>
@@ -36,13 +49,13 @@
 import axios from 'axios';
   export default {
     data() {
-      var checkSegment = (rule, value, callback) => {
+      let checkSegment = (rule, value, callback) => {
         if (this.ruleForm.segment==='') {
-          return callback(new Error('段号不能为空'));
+          return callback(new Error('不能为空'));
         }
         setTimeout(() => {
           if ( isNaN(parseFloat(this.ruleForm.segment))) {
-            callback(new Error('请输入段号'));
+            callback(new Error('格式不符合'));
           } else {
             if (this.ruleForm.segment > 100) {
               callback(new Error('不可大于100'));
@@ -52,31 +65,15 @@ import axios from 'axios';
           }
         }, 300);
       };
-      var validatePass = (rule, value, callback) =>  {
-        if (this.ruleForm.oilCol==='') {
-          return callback(new Error('油浓度不能为空'));
+      let validNumber = (rule, value, callback) =>  {
+        if (value==='') {
+          return callback(new Error('不能为空'));
         }
         setTimeout(() => {
-          if (isNaN(parseFloat(this.ruleForm.oilCol))) {
-            callback(new Error('请输入油浓度'));
+          if (isNaN(parseFloat(value))) {
+            callback(new Error('格式不符合'));
           } else {
-            if (this.ruleForm.oilCol > 100) {
-              callback(new Error('不可大于100'));
-            } else {
-              callback();
-            }
-          }
-        }, 300);
-      };
-      var validatePass2 = (rule, value, callback) =>  {
-        if (this.ruleForm.waterCol==='') {
-          return callback(new Error('水浓度不能为空'));
-        }
-        setTimeout(() => {
-          if (isNaN(parseFloat(this.ruleForm.waterCol))) {
-            callback(new Error('请输入水浓度'));
-          } else {
-            if (this.ruleForm.waterCol > 100) {
+            if (value > 100) {
               callback(new Error('不可大于100'));
             } else {
               callback();
@@ -92,19 +89,27 @@ import axios from 'axios';
           segment:"",
           oilCol:"",
           waterCol:"",
-          date:""
+          date:"",
+          oilMess:"",
+          waterMess:""
         },
         formLabelWidth: '120px',
         //校验规则
         rules: {
-          pass: [
+          segment: [
             { validator: checkSegment, trigger: 'blur' }
           ],
-          checkPass: [
-            { validator: validatePass, trigger: 'blur' }
+          waterCol: [
+            { validator: validNumber, trigger: 'blur' }
           ],
-          age: [
-            { validator: validatePass2, trigger: 'blur' }
+          oilCol: [
+            { validator: validNumber, trigger: 'blur' }
+          ],
+          waterMess: [
+            { validator: validNumber, trigger: 'blur' }
+          ],
+          oilMess: [
+            { validator: validNumber, trigger: 'blur' }
           ]
         }
       };
@@ -118,18 +123,22 @@ import axios from 'axios';
                 OilCol:this.ruleForm.oilCol.toString(),
                 WaterCol:this.ruleForm.waterCol.toString(),
                 segment:this.ruleForm.segment.toString(),
+                OilMess:this.ruleForm.oilMess.toString(),
+                WaterMess:this.ruleForm.waterMess.toString(),
             }
             this.$store.state.activity.data.push(newobj);
 
             this.$message('添加成功');
             axios.post('http://localhost:8002/insert',{
-                params:{
-                    Date:new Date(this.ruleForm.date),
-                    OilCol:this.ruleForm.oilCol.toString(),
-                    WaterCol:this.ruleForm.waterCol.toString(),
-                    segment:this.ruleForm.segment.toString(),
-                }}
-                ).then((res)=>{
+              params:{
+                Date:new Date(this.ruleForm.date),
+                OilCol:this.ruleForm.oilCol.toString(),
+                WaterCol:this.ruleForm.waterCol.toString(),
+                segment:this.ruleForm.segment.toString(),
+                OilMess:this.ruleForm.oilMess.toString(),
+                WaterMess:this.ruleForm.waterMess.toString()
+              }}
+            ).then((res)=>{
                 console.log(res.data);
             }).catch(function(error){
                 console.log(error);
@@ -138,6 +147,8 @@ import axios from 'axios';
             this.ruleForm.oilCol = "";
             this.ruleForm.waterCol = "";
             this.ruleForm.date = "";
+            this.ruleForm.oilMess = "";
+            this.ruleForm.waterMess = "";
           } else {
             console.log('添加失败');
             return false;
