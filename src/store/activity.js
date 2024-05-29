@@ -3,17 +3,12 @@ export default {
         data:[],//所有油田信息
         date:[],//所有日期
         segment:[],//所有段号
-        source:[],//图1信息
-        source2:[],//图2信息
+        source:[],//产出油浓度图1信息
+        source2:[],//产出油浓度图2信息
         series:[],
         series2:[],
+        sourceMess:[],//产出油质量信息
     },
     mutations: {
-        handleEdit(index, row) {
-            console.log(index, row);//编辑信息
-          },
-        handleDelete(index, row) {
-        console.log(index, row);//删除信息
-        },
     }
 }

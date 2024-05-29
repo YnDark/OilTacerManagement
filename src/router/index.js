@@ -37,10 +37,12 @@ VueRouter.prototype.replace = function (location, onResolve, onReject) {
 const router = new VueRouter({
     routes:[
         //主路由
+        {name:"Start",path:'/',redirect:"ActivityAudit"},
         {name:"Setting",path:'/Setting',component:Setting},//设置
         {name:"QualificationAudit",path:'/QualificationAudit',component:QualificationAudit},//活动审核
         {name:"ActivityAudit",path:'/ActivityAudit',component:ActivityAudit}//资格审核
-    ]
+    ],
+    mode: 'history'
 });
     router.beforeEach((to,from,next)=>{
         console.log(to.name,from.name)

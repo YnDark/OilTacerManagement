@@ -32,6 +32,7 @@ export default {
   beforeMount(){
     //总数据
     let source = [];//二维数组，第一行为横轴，其他未数据
+
     //初始化数据
     let temp = this.$store.state.activity.data;
     let tempdate = this.$store.state.activity.date;
@@ -40,6 +41,7 @@ export default {
     //处理日期
     let fullyear = [];
     fullyear[0] = 'product';
+
     let x = 1;
     for(let i in tempdate){
       let year = new Date(tempdate[i].Date).getFullYear().toString();
@@ -49,6 +51,7 @@ export default {
       x++;
     }
     source[0] = fullyear;
+
     //处理段号
     for(let i in segment){
       source[parseInt(i)+1] = new Array(fullyear.length).fill(0);
@@ -69,8 +72,8 @@ export default {
           //日期相同
           for(let j in segment){
             if(temp[i].segment === segment[j].segment){
-            //段号相同
-            this.$set(source[parseInt(j)+1],parseInt(k)+1,temp[i].OilCol);
+              //段号相同
+              this.$set(source[parseInt(j)+1],parseInt(k)+1,temp[i].OilCol);
             }
           }
         }
@@ -78,8 +81,6 @@ export default {
     }
     this.$store.state.activity.series = series;
     this.$store.state.activity.source = source;
-    console.log(source);
-    console.log(this.$store.state.activity.source)
 
     //第二个图的数据
     let source2 = [];//二维数组，第一行为横轴，其他未数据
@@ -122,7 +123,6 @@ export default {
     this.$store.state.activity.series2 = series2;
     this.$store.state.activity.source2 = source2;
     console.log(source2);
-    console.log(this.$store.state.activity.source2);
   },
   mounted() {
       // 订阅消息
@@ -136,6 +136,7 @@ export default {
   },
   computed:{
     option1(){
+      console.log(this.$store.state.activity.source);
       return {
         legend: {},
         tooltip: {},

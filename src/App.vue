@@ -13,31 +13,39 @@ export default {
     Layout,
   },
   beforeMount(){
-    //获取全部数据
-    axios.get('http://localhost:8002/info').then((res)=>{
-      this.$store.state.activity.data = res.data;
-      console.log(res.data);
-    }).catch(function(error){
-      console.log(error);
-    });
-
-    //获取全部日期
-    axios.get('http://localhost:8002/date').then((res)=>{
-      this.$store.state.activity.date = res.data;
-    }).catch(function(error){
-      console.log(error);
-    });
-
-    //获取全部段号
-    axios.get('http://localhost:8002/segment').then((res)=>{
-      this.$store.state.activity.segment = res.data;
-      console.log(res.data);
-    }).catch(function(error){
-      console.log(error);
-    });
+    Promise.all([
+      new Promise((resolve) =>{
+        //获取全部数据
+        axios.get('http://localhost:8002/info').then((res)=>{
+          resolve(res.data);
+          console.log(res.data);
+        }).catch(function(error){
+          console.log(error);
+        });
+      }),
+      new Promise((resolve) =>{
+        //获取全部日期
+        axios.get('http://localhost:8002/date').then((res)=>{
+          resolve(res.data);
+        }).catch(function(error){
+          console.log(error);
+        });
+      }),
+      new Promise((resolve) =>{
+        //获取全部段号
+        axios.get('http://localhost:8002/segment').then((res)=>{
+          console.log(res.data);
+          resolve(res.data);
+        }).catch(function(error){
+          console.log(error);
+        });
+      }),]).then(res=>{
+        this.$store.state.activity.data = res[0];
+        this.$store.state.activity.date = res[1];
+        this.$store.state.activity.segment = res[2];
+        console.log(res);
+      })
   },
-  mounted(){
-  }
 }
 const debounce = (fn, delay) => {
   let timer

@@ -8,6 +8,7 @@ import store from './store';
 import 'echarts';
 import Echarts from 'vue-echarts';
 import moment from 'moment';
+import '@/assets/icon/iconfont.css'
 
 Vue.prototype.$moment = moment
 Vue.component("Echarts",Echarts);

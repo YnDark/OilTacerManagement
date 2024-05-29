@@ -16,7 +16,7 @@
       :key="e.name"
       :index="e.name"
     >
-      <i :class="e.icon"></i>
+      <span v-bind:class = "`iconfont icon-` + e.icon "></span>
       <span slot="title">{{ e.label }}</span>
     </el-menu-item>
   </el-menu>
@@ -48,21 +48,21 @@ export default {
           path: "/ActivityAudit",
           name: "ActivityAudit",
           label: "全部数据",
-          icon: "el-icon-document",
+          icon: "biaoge",
           url: "",
         },
         {
           path: "/QualificationAudit",
           name: "QualificationAudit",
-          label: "数据展示",
-          icon: "el-icon-pie-chart",
+          label: "柱状图",
+          icon: "tubiaozhuzhuangtu",
           url: "",
         },
         {
           path: "/Setting",
           name: "Setting",
-          label: "设置",
-          icon: "el-icon-setting",
+          label: "折线图",
+          icon: "zhexiantu",
           url: "",
         },
       ],

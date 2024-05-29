@@ -5,22 +5,61 @@
 </template>
 
 <script>
-
+import moment from 'moment';
 export default {
   name: 'Setting',
   components: {
   },
+  created(){
+    //总数据
+    let series = [];//
+
+    //初始化数据
+    let temp = this.$store.state.activity.data;
+    let tempdate = this.$store.state.activity.date;
+    let segment = this.$store.state.activity.segment;
+
+    //处理具体数据
+      for(let k = 0; k < segment.length; k++){
+        //
+        let oilMess = new Array(tempdate.length);
+        for(let j = 0;j < tempdate.length; j++){
+          for(let i in temp){
+            if(temp[i].Date === tempdate[j].Date && temp[i].segment === segment[k].segment){
+              this.$set(oilMess,j,temp[i].OilMess);
+            }
+          }
+        }
+        //
+        series.push({
+          connectNulls: true,
+          name: segment[k].segment,
+          type: "line",
+          itemStyle: {
+            normal: {
+                lineStyle: {
+                  width:5
+                }
+            }
+          },
+          data: oilMess,
+        });
+    }
+    this.$store.state.activity.sourceMess = series;
+    console.log(this.$store.state.activity.sourceMess);
+  },
   data() {
+    console.log(this.$store.state.activity.date);
     return {
       option: {
         title: {
-          text: 'Stacked Line'
+          text: '数据折线图'
         },
         tooltip: {
           trigger: 'axis'
         },
         legend: {
-          data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
+          data: this.$store.state.activity.Date
         },
         grid: {
           left: '3%',
@@ -36,43 +75,31 @@ export default {
         xAxis: {
           type: 'category',
           boundaryGap: false,
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+          data: this.$store.state.activity.date.map((obj)=> moment(obj.Date).format('YYYY-MM-DD'))
         },
         yAxis: {
           type: 'value'
         },
-        series: [
-          {
-            name: 'Email',
-            type: 'line',
-            stack: 'Total',
-            data: [120, 132, 101, 134, 90, 230, 210]
-          },
-          {
-            name: 'Union Ads',
-            type: 'line',
-            stack: 'Total',
-            data: [220, 182, 191, 234, 290, 330, 310]
-          },
-          {
-            name: 'Video Ads',
-            type: 'line',
-            stack: 'Total',
-            data: [150, 232, 201, 154, 190, 330, 410]
-          },
-          {
-            name: 'Direct',
-            type: 'line',
-            stack: 'Total',
-            data: [320, 332, 301, 334, 390, 330, 320]
-          },
-          {
-            name: 'Search Engine',
-            type: 'line',
-            stack: 'Total',
-            data: [820, 932, 901, 934, 1290, 1330, 1320]
+        series: this.$store.state.activity.sourceMess
+    },
+    computed:{
+      series(){
+        this.$store.state.activity.source2.map((seg) => {
+          if(seg === 'product'){
+            return seg.map((date)=>date);
           }
-        ]
+          else{
+            return {
+              connectNulls: true,
+              name:seg,
+              type: 'line',
+              data:seg.map(()=>{
+
+              })
+            }
+          }
+        })
+      }
     }
 
     }
