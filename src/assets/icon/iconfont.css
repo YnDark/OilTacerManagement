@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 4124176 */
-  src: url('iconfont.woff2?t=1716889092445') format('woff2'),
-       url('iconfont.woff?t=1716889092445') format('woff'),
-       url('iconfont.ttf?t=1716889092445') format('truetype');
+  src: url('iconfont.woff2?t=1716973894772') format('woff2'),
+       url('iconfont.woff?t=1716973894772') format('woff'),
+       url('iconfont.ttf?t=1716973894772') format('truetype');
 }
 
 .iconfont {
@@ -12,6 +12,10 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   margin-right: 10px;
+}
+
+.icon-bingzhuangtucopy:before {
+  content: "\e6c6";
 }
 
 .icon-biaoge:before {

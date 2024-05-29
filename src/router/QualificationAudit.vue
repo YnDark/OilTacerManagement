@@ -140,6 +140,11 @@ export default {
       return {
         legend: {},
         tooltip: {},
+        toolbox: {
+          feature: {
+            saveAsImage: {}
+          }
+        },
         dataset: {
           /*source: [
             //['product', '2015', '2016', '2017'],
@@ -191,6 +196,11 @@ export default {
       return {
         legend: {
           formatter: '第 {name} 段'
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {}
+          }
         },
         tooltip: {},
         dataset: {

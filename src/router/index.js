@@ -2,6 +2,7 @@ import VueRouter from 'vue-router'
 import ActivityAudit from './ActivityAudit.vue'
 import QualificationAudit from './QualificationAudit.vue'
 import Setting from './Setting.vue'
+import PieChart from './PieChart.vue'
 
 const originalPush = VueRouter.prototype.push
 const originalReplace = VueRouter.prototype.replace
@@ -38,9 +39,10 @@ const router = new VueRouter({
     routes:[
         //主路由
         {name:"Start",path:'/',redirect:"ActivityAudit"},
-        {name:"Setting",path:'/Setting',component:Setting},//设置
-        {name:"QualificationAudit",path:'/QualificationAudit',component:QualificationAudit},//活动审核
-        {name:"ActivityAudit",path:'/ActivityAudit',component:ActivityAudit}//资格审核
+        {name:"Setting",path:'/Setting',component:Setting},
+        {name:"QualificationAudit",path:'/QualificationAudit',component:QualificationAudit},
+        {name:"ActivityAudit",path:'/ActivityAudit',component:ActivityAudit},
+        {name:"PieChart",path:'/PieChart',component:PieChart},
     ],
     mode: 'history'
 });

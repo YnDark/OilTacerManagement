@@ -16,7 +16,8 @@
       :key="e.name"
       :index="e.name"
     >
-      <span v-bind:class = "`iconfont icon-` + e.icon "></span>
+      <!-- <i class="el-icon-s-tools"></i> -->
+      <i v-bind:class = "`iconfont icon-` + e.icon "></i>
       <span slot="title">{{ e.label }}</span>
     </el-menu-item>
   </el-menu>
@@ -63,6 +64,13 @@ export default {
           name: "Setting",
           label: "折线图",
           icon: "zhexiantu",
+          url: "",
+        },
+        {
+          path: "/PieChart",
+          name: "PieChart",
+          label: "饼状图",
+          icon: "bingzhuangtucopy",
           url: "",
         },
       ],

@@ -8,6 +8,7 @@ export default {
         series:[],
         series2:[],
         sourceMess:[],//产出油质量信息
+        chartsData:[]//饼图信息
     },
     mutations: {
     }

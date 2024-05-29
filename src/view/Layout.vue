@@ -28,7 +28,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 .el-header, .el-footer {
     /* background-color: #B3C0D1;
     color: #333; */
@@ -56,7 +56,9 @@ export default {
   body > .el-container {
     margin-bottom: 40px;
   }
-  
+  .el-container {
+    height: 100vh;
+  }
   .el-container:nth-child(5) .el-aside,
   .el-container:nth-child(6) .el-aside {
     line-height: 260px;

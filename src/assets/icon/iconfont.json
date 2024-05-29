@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "9874461",
+      "name": "KHCFDC_饼状图",
+      "font_class": "bingzhuangtucopy",
+      "unicode": "e6c6",
+      "unicode_decimal": 59078
+    },
+    {
       "icon_id": "1305461",
       "name": "表格",
       "font_class": "biaoge",

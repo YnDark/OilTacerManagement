@@ -10,7 +10,7 @@ export default {
   name: 'Setting',
   components: {
   },
-  created(){
+  mounted(){
     //总数据
     let series = [];//
 
@@ -75,10 +75,38 @@ export default {
         xAxis: {
           type: 'category',
           boundaryGap: false,
+          name: '日期' ,
+          nameLocation: 'center',
+          nameTextStyle:{
+            lineHeight:100,
+            fontSize: 20,
+            fontWeight:'bolder'
+          },
+          axisLabel: {
+            lineHeight: 25,
+            fontSize: 18,
+            formatter: '{value}',
+            align: 'center'
+            // ...
+          },
           data: this.$store.state.activity.date.map((obj)=> moment(obj.Date).format('YYYY-MM-DD'))
         },
         yAxis: {
-          type: 'value'
+          type: 'value',
+          name: '质量' ,
+          nameLocation: 'center',
+          nameTextStyle:{
+            lineHeight:100,
+            fontSize: 20,
+            fontWeight:'bolder'
+          },
+          axisLabel:{
+          lineHeight: 25,
+          fontSize: 18,
+          formatter: ' {value} ',
+          align: 'center'
+          // ...
+        },
         },
         series: this.$store.state.activity.sourceMess
     },
@@ -110,7 +138,7 @@ export default {
 <style lang="less" scoped>
   .outter {
     width: 100%;
-    height: 100%;
+    height: 100vh;
     min-width: 1000px;
     clear: both;
   }
