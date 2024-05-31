@@ -60,10 +60,10 @@
     </el-table-column>
     <el-table-column label="操作" min-width="300">
       <template slot-scope="scope">
-        <el-button
+        <!-- <el-button
           size="mini"
           @click="handleEdit(scope.$index, scope.row)">编辑
-        </el-button>
+        </el-button> -->
         <el-button
           size="mini"
           type="danger"
@@ -103,6 +103,31 @@ import axios from 'axios';
     methods: {
       handleEdit(index, row) {
         console.log(index, row);
+        for(let i in this.$store.state.activity.data){
+          if(this.$store.state.activity.data[i].segment === row.segment && this.$store.state.activity.data[i].Date === row.Date){
+            this.$store.state.activity.data.splice(i, 1);
+            break;
+          }
+        }
+        console.log(index, row);
+        console.log({
+                Date:row.Date,
+                OilCol:row.OilCol.toString(),
+                WaterCol:row.WaterCol.toString(),
+                segment:row.segment.toString(),
+          })
+        axios.post('http://localhost:8002/update',{
+            params:{
+                Date:row.Date,
+                OilCol:row.OilCol.toString(),
+                WaterCol:row.WaterCol.toString(),
+                segment:row.segment.toString(),
+          }}
+          ).then((res)=>{
+            console.log(res.data);
+          }).catch(function(error){
+          console.log(error);
+          });
       },
       handleDelete(index, row) {
         for(let i in this.$store.state.activity.data){

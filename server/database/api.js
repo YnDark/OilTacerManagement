@@ -52,7 +52,7 @@ const insertData = (obj) => {
 //改
 const updateData = (param) => {
   return new Promise((resolve,reject) => {
-    connection.query(`update account set ${WaterCol = param.WaterCol} ${oilCol = param.WaterCol} where phone = ?`,(err,data) => {
+    connection.query(`update oildata set WaterCol = ${param.WaterCol}, OilCol = ${param.OilCol}, OilMess = ${param.OilMess},WaterMess = ${param.WaterMess},  where segment = '${param.segment}' AND Date = '${param.date}' `,(err,data) => {
       //如果err为null则成功
       if(err!=null) reject(err);
       resolve(data)

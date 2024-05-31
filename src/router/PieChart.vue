@@ -10,7 +10,7 @@ export default {
     components:{
     },
     created(){
-        this.$store.state.activity.chartsData = genData(50);
+        this.$store.state.activity.chartsData = genData(100);
         function genData(count) {
             // prettier-ignore
             const nameList = [
@@ -26,7 +26,7 @@ export default {
                 legendData.push(name);
                 seriesData.push({
                     name: name,
-                    value: 1 
+                    value: Math.random()
                 });
             }
             return {
