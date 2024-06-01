@@ -10,54 +10,44 @@ export default {
     components:{
     },
     created(){
-        this.$store.state.activity.chartsData = genData(100);
-        function genData(count) {
-            // prettier-ignore
-            const nameList = [
-                    '赵', '钱', '孙', '李', '周', '吴', '郑', '王', '冯', '陈', '褚', '卫', '蒋', '沈', '韩', '杨', '朱', '秦', '尤', '许', '何', '吕', '施', '张', '孔', '曹', '严', '华', '金', '魏', '陶', '姜', '戚', '谢', '邹', '喻', '柏', '水', '窦', '章', '云', '苏', '潘', '葛', '奚', '范', '彭', '郎', '鲁', '韦', '昌', '马', '苗', '凤', '花', '方', '俞', '任', '袁', '柳', '酆', '鲍', '史', '唐', '费', '廉', '岑', '薛', '雷', '贺', '倪', '汤', '滕', '殷', '罗', '毕', '郝', '邬', '安', '常', '乐', '于', '时', '傅', '皮', '卞', '齐', '康', '伍', '余', '元', '卜', '顾', '孟', '平', '黄', '和', '穆', '萧', '尹', '姚', '邵', '湛', '汪', '祁', '毛', '禹', '狄', '米', '贝', '明', '臧', '计', '伏', '成', '戴', '谈', '宋', '茅', '庞', '熊', '纪', '舒', '屈', '项', '祝', '董', '梁', '杜', '阮', '蓝', '闵', '席', '季', '麻', '强', '贾', '路', '娄', '危'
-                ];
-            const legendData = [];
-            const seriesData = [];
-            for (var i = 0; i < count; i++) {
-                var name =
-                Math.random() > 0.65
-                    ? makeWord(4, 1) + '·' + makeWord(3, 0)
-                    : makeWord(2, 1);
-                legendData.push(name);
-                seriesData.push({
-                    name: name,
-                    value: Math.random()
-                });
-            }
-            return {
-                legendData: legendData,
-                seriesData: seriesData
-            };
-            function makeWord(max, min) {
-                const nameLen = Math.ceil(Math.random() * max + min);
-                const name = [];
-                for (var i = 0; i < nameLen; i++) {
-                name.push(nameList[Math.round(Math.random() * nameList.length - 1)]);
-                }
-                return name.join('');
-            }
-            }
+        let sourceMess = this.$store.state.activity.sourceMess
+
+        let seriesData = sourceMess.map((e)=>{
+                        return{
+                            name: e.name,
+                            value: e.data.reduce((sum,num) => sum+num , 0)
+                        }
+                    });
+        let legendData = seriesData.map((e)=>e.name.toString());
+        console.log(seriesData)
+        console.log(legendData)
+
+        this.$store.state.activity.chartsData = {
+            legendData: legendData,
+            seriesData: seriesData
+        };
     },
     computed:{
         option() {
             return {
                 title: {
-                    text: '同名数量统计',
-                    subtext: '纯属虚构',
+                    text: '每段产油质量统计',
                     left: 'center'
                 },
                 tooltip: {
                     trigger: 'item',
-                    formatter: '{a} <br/>{b} : {c} ({d}%)'
+                    formatter: '第 {b} {a} <br/> 产油 {c} 占 ({d}%)',
+                    textStyle:{
+                        fontSize:15
+                    },
                 },
                 legend: {
+                    formatter: '第 {name} 段',
                     type: 'scroll',
                     orient: 'vertical',
+                    textStyle:{
+                        fontSize:15
+                    },
                     right: 10,
                     top: 20,
                     bottom: 20,
@@ -65,25 +55,29 @@ export default {
                 },
                 series: 
                 [{
-                    name: '姓名',
+                    name: '段',
                     type: 'pie',
                     radius: '55%',
                     center: ['40%', '50%'],
                     data: this.$store.state.activity.chartsData.seriesData,
+                    textStyle:{
+                        fontSize:15
+                    },
                     emphasis: {
                         itemStyle: {
-                        shadowBlur: 10,
-                        shadowOffsetX: 0,
-                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
                         }
+                    },
+                    label:{
+                         formatter: '第 {b} {a}',
+                         fontSize : 15
                     }
-                }]
+                },
+                ]
             }
         },
-    },
-    data() {
-      return {
-      }
     },
     methods:{
     }
