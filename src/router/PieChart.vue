@@ -36,7 +36,7 @@ export default {
                 },
                 tooltip: {
                     trigger: 'item',
-                    formatter: '第 {b} {a} <br/> 产油 {c} 占 ({d}%)',
+                    formatter: '第 {b} {a} <br/> 总产油 {c} <br/> 占 {d}%',
                     textStyle:{
                         fontSize:15
                     },
