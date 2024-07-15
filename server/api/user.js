@@ -5,7 +5,8 @@ const {
     updateData,
     deleteData,
     getSegment,
-    getDate} = require('../database/api')
+    getDate,
+    selectSegmentData} = require('../database/api')
 const express = require('express');
 const db = require('mssql');
 const router = express.Router();
@@ -42,6 +43,17 @@ router.get('/segment', function (req, res) {
     });
 });
 
+//获取全部段号
+router.get('/selectSegmentData', function (req, res) {
+    console.log('getting selectSegmentData');
+    selectSegmentData().then(response=>{
+        res.send(response);
+    }).catch(err=>{                                                                                                                                                                                                                                                                                                                                                                                                                 
+        res.send(err);
+        console.log(err);
+    });
+});
+
 
 const bodyParser=require("body-parser");
  
@@ -59,9 +71,12 @@ router.post("/insert",urlencodedParser,function(req,res){
     const date = req.body.params.Date;
     const waterMess = req.body.params.WaterMess;
     const oilMess = req.body.params.OilMess;
+    const oilName = req.body.params.OilName;
     let year = new Date(date).getFullYear().toString();
     let month = (new Date(date).getMonth() + 1).toString();
     let strDate = new Date(date).getDate().toString();
+    let hour = new Date(date).getHours().toString();
+    let mimuts = new Date(date).getMinutes().toString();
     let allDate = year+"-"+month+"-"+strDate;
     const obj = {
         segment:segment,
@@ -69,10 +84,11 @@ router.post("/insert",urlencodedParser,function(req,res){
         waterCol:waterCol,
         date:allDate,
         waterMess:waterMess,
-        oilMess:oilMess
+        oilMess:oilMess,
+        oilName:oilName
     }
     console.log(obj)
-    console.log(`insert into oildata(WaterCol,oilCol,segment,Date,WaterMess,OilMess) values('${obj.waterCol}','${obj.oilCol}','${obj.segment}','${obj.date}','${obj.waterMess}','${obj.oilMess}')`);
+    console.log(`insert into oildata(WaterCol,oilCol,segment,Date,WaterMess,OilMess,OilName) values('${obj.waterCol}','${obj.oilCol}','${obj.segment}','${obj.date}','${obj.waterMess}','${obj.oilMess}','${obj.oilName}')`);
     insertData(obj).then(response=>{
         res.send({
             status:0,
@@ -130,6 +146,32 @@ router.post("/update",urlencodedParser,function(req,res){
         oilCol:oilCol,
         waterCol:waterCol,
         date:allDate
+    }
+    console.log(obj)
+    updateData(obj).then(response=>{
+        res.send({
+            status:0,
+            msg:"请求成功",
+            data:req.body
+        });
+    }).catch(err=>{                                                                                                                                                                                                                                                                                                                                                                                                                 
+        res.send(err);
+        console.log(err);
+    });
+});
+//更新段表
+router.post("/updateSegmentData",urlencodedParser,function(req,res){
+    console.log('updateSegmentData');
+    console.log(req.body);
+    const segment_number = req.body.params.segment_number;
+    const segment_name = req.body.params.segment_name;
+    const oil_all = req.body.params.oil_all;
+    const water_all = req.body.params.water_all;
+    const obj = {
+        water_all:water_all,
+        segment_number:segment_number,
+        segment_name:segment_name,
+        oil_all:oil_all
     }
     console.log(obj)
     updateData(obj).then(response=>{

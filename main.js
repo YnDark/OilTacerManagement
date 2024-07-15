@@ -15,6 +15,8 @@ function createWindow () {
   win.webContents.openDevTools()
   // 连接到Vue页面
   win.loadURL("http://localhost:8080")
+  //关闭菜单
+  win.setMenu(null);
 }
 // 初始化窗体
 app.whenReady().then(() => {

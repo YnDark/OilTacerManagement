@@ -1,8 +1,15 @@
 import VueRouter from 'vue-router'
 import ActivityAudit from './ActivityAudit.vue'
-import QualificationAudit from './QualificationAudit.vue'
-import Setting from './Setting.vue'
-import PieChart from './PieChart.vue'
+import OilBarByAll from './OilBarByAll.vue'
+import OilBarByDay from './OilBarByDay.vue'
+import OilLineByColDay from './OilLineByColDay.vue'
+import OilLineByMessDay from './OilLineByMessDay.vue'
+import WaterBarByAll from './WaterBarByAll.vue'
+import WaterBarByDay from './WaterBarByDay.vue'
+import WaterLineByColDay from './WaterLineByColDay.vue'
+import WaterLineByMessDay from './WaterLineByMessDay.vue'
+import WaterLineByVDay from './WaterLineByVDay.vue'
+import OneSegData from './OneSegData.vue'
 
 const originalPush = VueRouter.prototype.push
 const originalReplace = VueRouter.prototype.replace
@@ -39,10 +46,17 @@ const router = new VueRouter({
     routes:[
         //主路由
         {name:"Start",path:'/',redirect:"ActivityAudit"},
-        {name:"Setting",path:'/Setting',component:Setting},
-        {name:"QualificationAudit",path:'/QualificationAudit',component:QualificationAudit},
         {name:"ActivityAudit",path:'/ActivityAudit',component:ActivityAudit},
-        {name:"PieChart",path:'/PieChart',component:PieChart},
+        {name:"OilBarByAll",path:'/QualificationAudit/OilBarByAll',component:OilBarByAll},
+        {name:"OilBarByDay",path:'/QualificationAudit/OilBarByDay',component:OilBarByDay},
+        {name:"OilLineByColDay",path:'/Setting/OilLineByColDay"',component:OilLineByColDay},
+        {name:"OilLineByMessDay",path:'/Setting/OilLineByMessDay',component:OilLineByMessDay},
+        {name:"WaterBarByAll",path:'/QualificationAudit/WaterBarByAll',component:WaterBarByAll},
+        {name:"WaterBarByDay",path:'/QualificationAudit/WaterBarByDay',component:WaterBarByDay},
+        {name:"WaterLineByColDay",path:'/Setting/WaterLineByColDay',component:WaterLineByColDay},
+        {name:"WaterLineByMessDay",path:'/Setting/WaterLineByMessDay',component:WaterLineByMessDay},
+        {name:"WaterLineByVDay",path:'/Setting/WaterLineByVDay',component:WaterLineByVDay},
+        {name:"OneSegData",path:'/ActivityAudit/OneSegData',component:OneSegData},
     ],
     mode: 'history'
 });

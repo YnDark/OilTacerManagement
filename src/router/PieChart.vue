@@ -15,7 +15,7 @@ export default {
         let seriesData = sourceMess.map((e)=>{
                         return{
                             name: e.name,
-                            value: e.data.reduce((sum,num) => sum+num , 0)
+                            value: e.data.reduce((sum,num) => sum+num , 0).toFixed(2)
                         }
                     });
         let legendData = seriesData.map((e)=>e.name.toString());
@@ -71,7 +71,7 @@ export default {
                         }
                     },
                     label:{
-                         formatter: '第 {b} {a}',
+                         formatter: '第 {b} {a} (产油{c}吨，占比 {d}%)',
                          fontSize : 15
                     }
                 },

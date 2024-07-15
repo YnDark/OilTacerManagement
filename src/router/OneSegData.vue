@@ -8,12 +8,8 @@
     >
       <el-table-column
         min-width="50"
-        prop="segment"
-        sortable
         label="段号"
         width="100"
-        :filters="segment"
-        :filter-method="filterHandler2"
       >
         <template slot-scope="scope">
           <span style="margin-left: 10px">{{ scope.row.segment }}</span>
@@ -72,9 +68,9 @@
       <el-table-column label="操作" min-width="300">
         <template slot-scope="scope">
           <!-- <el-button
-          size="mini"
-          @click="handleEdit(scope.$index, scope.row)">编辑
-        </el-button> -->
+            size="mini"
+            @click="handleEdit(scope.$index, scope.row)">编辑
+          </el-button> -->
           <el-button
             size="mini"
             type="danger"
@@ -84,49 +80,42 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-button type="primary" @click="changeVisiable">添加数据</el-button
-    >
+    <Form></Form>
+    <el-button type="primary" @click="changeVisiable">添加数据</el-button>
   </div>
 </template>
-
-<script>
+  
+  <script>
 import axios from "axios";
 import moment from "moment";
-import PubSub from 'pubsub-js';
+import PubSub from "pubsub-js";
+import Form from '../components/Form.vue';
 export default {
-  name: "Table",
+  name: "OneSegData",
+  components:{
+    Form
+  },
   data() {
     return {
-      tableData: this.$store.state.activity.data,
-      segment: this.$store.state.activity.segment.map((e) => {
-        return {
-          text: "第" + e.segment + "段",
-          value: e.segment.toString(),
-        };
-      }),
     };
   },
   computed: {
-    allDate() {
-      let tempdate = this.$store.state.activity.date;
-      let showDate = [];
-      for (let i in tempdate) {
-        // let year = new Date(tempdate[i].Date).getFullYear().toString();
-        // let month = (new Date(tempdate[i].Date).getMonth() + 1).toString();
-        // let strDate = new Date(tempdate[i].Date).getDate().toString();
-        let time = moment(new Date(tempdate[i].Date)).format(
-          "YYYY-MM-DD HH:mm"
-        );
-        showDate[i] = {
-          text: time,
-          value: time,
-        };
-      }
-      console.log(showDate);
-      return showDate;
+    tableData() {
+        let allData = this.$store.state.activity.data;
+        let target = this.$route.query;
+        console.log(target)
+        console.log(allData)
+        let segData = [];
+        for(let i in allData){
+            if(allData[i].segment == target.segment_number){
+                segData.push(allData[i]);
+            }
+        }
+        this.$store.state.activity.segData = segData;
+        return this.$store.state.activity.segData;
     },
     nonTimeDate() {
-      let tempdate = this.$store.state.activity.date;
+      let tempdate = this.$store.state.activity.data;
       let showDate = new Set();
       for (let i in tempdate) {
         let time = moment(new Date(tempdate[i].Date)).format("YYYY-MM-DD");
@@ -231,16 +220,14 @@ export default {
     filterHandler2(value, row, column) {
       return row.segment === value;
     },
-    changeVisiable(){
+    changeVisiable() {
       PubSub.publish("showForm");
-    }
+    },
   },
-  mounted(){
-
-  }
+  mounted() {},
 };
 </script>
-<style lang="less" scoped>
+  <style lang="less" scoped>
 .el-table {
   overflow: hidden;
   margin-bottom: 50px;

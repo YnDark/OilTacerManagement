@@ -1,9 +1,12 @@
 <template>
     <div class="outter">
         <div class="leftcontent">
-          <el-button @click = "changeMenu" type="primary" icon="el-icon-menu" size="small" ></el-button>
+          <!-- <el-button @click = "changeMenu" type="primary" icon="el-icon-menu" size="small" ></el-button> -->
         </div>
         <div class="rightcontent">
+          <el-button @click = "reFresh" type="primary" size="small" >刷新</el-button>
+        </div>
+        <!-- <div class="rightcontent">
           <el-dropdown>
             <span class="el-dropdown-link">
               {{username}}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -12,7 +15,7 @@
               <el-dropdown-item>个人资料</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-        </div>
+        </div> -->
     </div>
 </template>
 <script>
@@ -21,7 +24,7 @@
       return {
         activeIndex: '1',
         activeIndex2: '1',
-        username:"杨定鑫"
+
       };
     },
     methods: {
@@ -31,6 +34,9 @@
       changeMenu(){
         console.log(this.$store.state.tab.isCollapse);
         this.$store.commit('changeCollapse');
+      },
+      reFresh(){
+        location.reload();
       }
     }
   }

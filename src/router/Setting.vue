@@ -78,6 +78,7 @@ export default {
           name: '日期' ,
           nameLocation: 'center',
           nameTextStyle:{
+            color: 'black',
             lineHeight:100,
             fontSize: 20,
             fontWeight:'bolder'
@@ -85,9 +86,10 @@ export default {
           axisLabel: {
             lineHeight: 25,
             fontSize: 18,
+            color:"black",
             formatter: '{value}',
-            align: 'center'
-            // ...
+            align: 'center',
+            margin: 20,
           },
           data: this.$store.state.activity.date.map((obj)=> moment(obj.Date).format('YYYY-MM-DD'))
         },
@@ -95,18 +97,39 @@ export default {
           type: 'value',
           name: '质量' ,
           nameLocation: 'center',
+          margin: 20,
           nameTextStyle:{
+            color: 'black',
             lineHeight:100,
             fontSize: 20,
             fontWeight:'bolder'
           },
           axisLabel:{
-          lineHeight: 25,
-          fontSize: 18,
-          formatter: ' {value} ',
-          align: 'center'
-          // ...
-        },
+            lineHeight: 25,
+            fontSize: 18,
+            color: 'black',
+            formatter: ' {value} 吨',
+            align: 'right',
+            margin: 10,
+          },
+          axisLine: {
+            show: true,    // 是否显示坐标轴轴线
+            lineStyle: {
+              color: '#999',    // 坐标轴线线的颜色
+              width: '1',    // 坐标轴线线宽
+              type: 'solid',    // 坐标轴线线的类型（solid实线类型；dashed虚线类型；dotted点状类型）
+            },
+          },
+          axisTick: {
+            show: true,    // 是否显示坐标轴刻度
+            inside: true,     // 坐标轴刻度是否朝内，默认朝外
+            length: 15,    //坐标轴刻度的长度        
+            lineStyle: {
+              color: 'black',     //刻度线的颜色
+              width: 2,    //坐标轴刻度线宽
+              type: 'solid',    //坐标轴线线的类型（solid实线类型；dashed虚线类型；dotted点状类型）
+            },
+          },
         },
         series: this.$store.state.activity.sourceMess
     },

@@ -1,8 +1,8 @@
 <template>
   <el-container>
     <!-- 侧边栏 -->
-    <el-aside width="auto">
-      <LeftMenu></LeftMenu>
+    <el-aside :width="width">
+      <LeftMenu ></LeftMenu>
     </el-aside>
     <el-container>
       <!-- 顶栏 -->
@@ -23,8 +23,19 @@ export default {
   name: 'Layout',
   components: {
     LeftMenu,
-    TopMenu
+    TopMenu,
   },
+  data(){
+    return{
+      
+    }
+  },
+  computed:{
+    width(){
+      let isCollapse = this.$store.state.tab.isCollapse;
+      return isCollapse ? "64px" : "300px" 
+    }
+  }
 }
 </script>
 
@@ -38,14 +49,15 @@ export default {
     margin: 0;
   }
   
-  .el-aside {
-    /* background-color: #D3DCE6;
-    color: #333; */
-    text-align: center;
-    line-height: 150px;
-    padding: 0;
-    margin: 0;
-  }
+.el-aside {
+  /* background-color: #D3DCE6;
+  color: #333; */
+  text-align: center;
+  line-height: 150px;
+  padding: 0;
+  margin: 0;
+  // transition: linear 1s;
+}
   
   .el-main {
     /* background-color: #E9EEF3;
@@ -58,6 +70,7 @@ export default {
   }
   .el-container {
     height: 100vh;
+    width: 100%;
   }
   .el-container:nth-child(5) .el-aside,
   .el-container:nth-child(6) .el-aside {

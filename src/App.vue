@@ -45,6 +45,7 @@ export default {
         this.$store.state.activity.segment = res[2];
         console.log(res);
       })
+      
   },
 }
 const debounce = (fn, delay) => {

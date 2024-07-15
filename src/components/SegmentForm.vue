@@ -1,41 +1,23 @@
 <template>
     <div>
         <!-- Form -->
-        <el-dialog title="添加数据" :visible.sync="dialogFormVisible">
+        <el-dialog title="修改段信息" :visible.sync="dialogFormVisible">
             <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="150px" class="demo-ruleForm">
 
-            <el-form-item label="段号" prop="segment">
-                <el-input  v-model.number="ruleForm.segment" autocomplete="off"></el-input>
+            <el-form-item label="段号" prop="segment" >
+                <el-input  v-model.number="ruleForm.segment" autocomplete="off" :disabled="isInput"></el-input>
             </el-form-item>
 
             <el-form-item label="井名" prop="oilName">
                 <el-input  v-model="ruleForm.oilName" autocomplete="off"></el-input>
             </el-form-item>
 
-            <el-form-item label="油浓度(ug/cd)" prop="oilCol">
-                <el-input  v-model="ruleForm.oilCol" autocomplete="off"></el-input>
+            <el-form-item label="水溶性示踪剂体积(L)" prop="waterVolume">
+                <el-input  v-model="ruleForm.waterVolume" autocomplete="off"></el-input>
             </el-form-item>
 
-            <el-form-item label="水浓度(ug/cd)" prop="waterCol">
-                <el-input v-model="ruleForm.waterCol"></el-input>
-            </el-form-item>
-
-            <el-form-item label="油质量(g/d)" prop="oilMess">
-                <el-input v-model="ruleForm.oilMess"></el-input>
-            </el-form-item>
-
-            <el-form-item label="水质量(g/d)" prop="waterMess">
-                <el-input v-model="ruleForm.waterMess"></el-input>
-            </el-form-item>
-
-            <el-form-item label="日期">
-                <div class="block">
-                    <el-date-picker
-                    v-model="ruleForm.date"
-                    type="datetime"
-                    placeholder="选择日期">
-                    </el-date-picker>
-                </div>
+            <el-form-item label="油溶性示踪剂体积(L)" prop="oilVolume">
+                <el-input  v-model="ruleForm.oilVolume" autocomplete="off"></el-input>
             </el-form-item>
 
             </el-form>
@@ -49,6 +31,7 @@
 
 <script>
 import axios from 'axios';
+import PubSub from 'pubsub-js';
   export default {
     data() {
       let checkSegment = (rule, value, callback) => {
@@ -89,28 +72,20 @@ import axios from 'axios';
         ruleForm: {
           oilName:"",
           segment:"",
-          oilCol:"",
-          waterCol:"",
-          date:"",
-          oilMess:"",
-          waterMess:""
+          waterVolume:"",
+          oilVolume:"",
         },
+        isInput:true,
         formLabelWidth: '120px',
         //校验规则
         rules: {
           segment: [
             { validator: checkSegment, trigger: 'blur' }
           ],
-          waterCol: [
+          waterVolume: [
             { validator: validNumber, trigger: 'blur' }
           ],
-          oilCol: [
-            { validator: validNumber, trigger: 'blur' }
-          ],
-          waterMess: [
-            { validator: validNumber, trigger: 'blur' }
-          ],
-          oilMess: [
+          oilVolume: [
             { validator: validNumber, trigger: 'blur' }
           ],
           oilName: [
@@ -124,43 +99,32 @@ import axios from 'axios';
         this.$refs[formName].validate((valid) => {
           if (valid) {
             let newobj = {
-                Date:new Date(this.ruleForm.date),
-                OilCol:this.ruleForm.oilCol.toString(),
-                WaterCol:this.ruleForm.waterCol.toString(),
-                segment:this.ruleForm.segment.toString(),
-                OilMess:this.ruleForm.oilMess.toString(),
-                WaterMess:this.ruleForm.waterMess.toString(),
-                OilName:this.ruleForm.oilName.toString(),
+                segment_number:this.ruleForm.segment.toString(),
+                segment_name:this.ruleForm.oilName.toString(),
+                oil_all:this.ruleForm.oilVolume.toString(),
+                water_all:this.ruleForm.waterVolume.toString(),
             }
             //是否存在重复校验
-            for(let i in this.$store.state.activity.data){
-              if(this.$store.state.activity.data == null) {
-                this.$message.error('添加失败,请保证数据加载完成再添加，请多切换再试')
-                return false; 
-              }
-
-              if(new Date(this.$store.state.activity.data[i].Date).getTime() == new Date(this.ruleForm.date).getTime() && this.$store.state.activity.data[i].segment.toString() === this.ruleForm.segment.toString()){
-                this.$message.error('已经存在相同日期和段号的数据，请删除后再添加')
+            for(let i in this.$store.state.activity.segmentData){
+              if(this.$store.state.activity.data[i].segment.toString() === this.ruleForm.segment.toString()){
+                this.$message.error('已经存在相同段号的数据，请删除后再更新')
                 return false;
               }
             }
 
-            this.$store.state.activity.data.push(newobj);
+            this.$store.state.activity.segmentData.push(newobj);
 
             //数据库更新
             this.$message({
               message:'添加成功',
               type: 'success'
             });
-            axios.post('http://localhost:8002/insert',{
+            axios.post('http://localhost:8002/updateSegmentData',{
               params:{
-                Date:new Date(this.ruleForm.date),
-                OilCol:this.ruleForm.oilCol.toString(),
-                WaterCol:this.ruleForm.waterCol.toString(),
-                segment:this.ruleForm.segment.toString(),
-                OilMess:this.ruleForm.oilMess.toString(),
-                WaterMess:this.ruleForm.waterMess.toString(),
-                OilName:this.ruleForm.oilName.toString()
+                segment_number:this.ruleForm.segment.toString(),
+                segment_name:this.ruleForm.oilName.toString(),
+                oil_all:this.ruleForm.oilVolume.toString(),
+                water_all:this.ruleForm.waterVolume.toString()
               }}
             ).then((res)=>{
                 console.log(res.data);
@@ -170,12 +134,9 @@ import axios from 'axios';
 
             //清空表单
             this.ruleForm.segment = "";
-            this.ruleForm.oilCol = "";
-            this.ruleForm.waterCol = "";
-            this.ruleForm.date = "";
-            this.ruleForm.oilMess = "";
-            this.ruleForm.waterMess = "";
-            this.ruleForm.OilName = "";
+            this.ruleForm.oilName = "";
+            this.ruleForm.oilVolume = "";
+            this.ruleForm.waterVolume = "";
           } else {
             this.$message.error('添加失败,数据校验未通过')
             console.log('添加失败');
@@ -189,7 +150,11 @@ import axios from 'axios';
       }
     },
     mounted(){
-      PubSub.subscribe("showForm",()=>{
+    PubSub.subscribe("showSegmentForm",(e,segData)=>{
+        this.ruleForm.segment = segData.segment_number;
+        this.ruleForm.oilName = segData.segment_name;
+        this.ruleForm.oilVolume = segData.oil_all;
+        this.ruleForm.waterVolume = segData.water_all;
         this.dialogFormVisible = !this.dialogFormVisible ;
       });
     }
