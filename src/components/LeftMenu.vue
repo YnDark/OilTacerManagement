@@ -19,7 +19,7 @@
       :index="e.name"
     >
       <!-- <i v-bind:class = "`iconfont icon-` + e.icon "></i> -->
-      <template slot="title">{{ isCollapse ? "数据" : "全部数据" }}</template>
+      <template slot="title">{{ e.label }}</template>
     </el-menu-item>
 
     <el-submenu index="1">
@@ -76,7 +76,15 @@ export default {
   data() {
     return {
       HeadData:
-      [{
+      [
+      {
+          path: "/home",
+          name: "Home",
+          label: "首页",
+          icon: "home",
+          url: "",
+      },
+      {
           path: "/ActivityAudit",
           name: "ActivityAudit",
           label: "全部数据",
@@ -111,14 +119,7 @@ export default {
           label: "油溶性示踪剂瞬时产出图",
           icon: "zhexiantu",
           url: "",
-        },
-        {
-          path: "/PieChart",
-          name: "PieChart",
-          label: "饼状图",
-          icon: "bingzhuangtucopy",
-          url: "",
-        },
+        }
       ],
       WaterMenuData: [
         // {

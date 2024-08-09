@@ -30,7 +30,7 @@
       >
       </el-table-column>
       <el-table-column
-        label="水浓度(ug/cd)"
+        label="水溶性示踪剂浓度(ug/cd)"
         prop="WaterCol"
         min-width="100"
         width="300"
@@ -41,7 +41,7 @@
       </el-table-column>
       <el-table-column
         min-width="50"
-        label="油浓度(ug/cd)"
+        label="油溶性示踪剂浓度(ug/cd)"
         prop="oilCol"
         width="300"
       >
@@ -51,7 +51,7 @@
       </el-table-column>
       <el-table-column
         min-width="50"
-        label="油质量(g/d)"
+        label="油溶性示踪剂质量(g/d)"
         prop="oilMess"
         width="300"
       >
@@ -61,7 +61,7 @@
       </el-table-column>
       <el-table-column
         min-width="50"
-        label="水质量(g/d)"
+        label="水溶性示踪剂质量(g/d)"
         prop="waterMess"
         width="300"
       >
@@ -84,8 +84,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-button type="primary" @click="changeVisiable">添加数据</el-button
-    >
+    <!-- <el-button type="primary" @click="changeVisiable">添加数据</el-button> -->
   </div>
 </template>
 

@@ -15,6 +15,8 @@
               <div style="margin: 15px">
                 <div><div class="card-label">注入油溶性示踪剂总量:</div><span>{{item.oil_all}} L</span></div>
                 <div><div class="card-label">注入水溶性示踪剂总量:</div><span>{{item.water_all}} L</span></div>
+                <div><div class="card-label">油溶性示踪剂有效含量(%):</div><span>{{item.oil_effective_content}} %</span></div>
+                <div><div class="card-label">水溶性示踪剂有效含量(%):</div><span>{{item.water_effective_content}} %</span></div>
               </div>
               <div class="footer">
                 <div style="display: flex;align-items: center">
@@ -26,13 +28,15 @@
                 </div>
                 <div style="display:flex; align-items: center;color: #cccccc">|</div>
                 <div style="display: flex;align-items: center">
-                  <el-button type="text" style="color: #18c8bd" @click="deletSegmentData(index)">删除分段</el-button>
+                  <el-button type="text" style="color: #18c8bd" @click="open(index)">删除分段</el-button>
                 </div>
               </div>
             </el-card>
           </el-col>
         </el-row>
         <SegmentForm></SegmentForm>
+        <AddSegmentForm></AddSegmentForm>
+        <el-button type="primary" @click="addSegment()">添加分段</el-button>
       </div>
     </el-tab-pane>
   </el-tabs>
@@ -42,10 +46,12 @@ import axios from 'axios';
 import Table from "./Table.vue";
 import SegmentForm from "./SegmentForm.vue"
 import PubSub from 'pubsub-js';
+import AddSegmentForm from './addSegmentForm.vue'
 export default {
   components: { 
     Table,
-    SegmentForm
+    SegmentForm,
+    AddSegmentForm
    },
   name: "TopTab",
   data() {
@@ -78,12 +84,56 @@ export default {
         name:'OneSegData',
         query:this.segmentData[index]
       })
-      console.log(event);
     },
     handleClick(tab, event) {
       console.log(tab, event);
-    }
+    }, 
+    open(index) {
+        this.$confirm('此操作将永久删除该段所有数据, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          console.log("删除中")
+          axios.post("http://localhost:8002/deleteSegment", {
+            params: {
+              segment_number:this.segmentData[index].segment_number
+            },
+          })
+          .then((res) => {
+            console.log(res.data);
+            this.segmentData = this.segmentData.filter((e)=>{
+              console.log(this.segmentData[index].segment_number);
+              console.log(e.segment_number);
+              console.log(e.segment_number !== this.segmentData[index].segment_number)
+              return e.segment_number !== this.segmentData[index].segment_number
+            })
+            this.$forceUpdate();
+            console.log(this.segmentData);
 
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+          })
+          .catch((error)=>{
+            console.log(error);
+            this.$message({
+              type: 'info',
+              message: '删除出错'
+          });  
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
+    },
+    addSegment(){
+      console.log("showAddSegmentForm");
+      PubSub.publish("showAddSegmentForm");
+    }
   },
 };
 </script>

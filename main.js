@@ -1,7 +1,10 @@
 // electron基础引入
 const { app, BrowserWindow } = require('electron')
+import { Menu } from 'electron'
+
 // 创建electron窗体函数
 function createWindow () {
+  Menu.setApplicationMenu(null)
   const win = new BrowserWindow({
     width: 800,
     height: 600,
@@ -30,4 +33,5 @@ app.on(
     callback(true);
   }
 );
+
 

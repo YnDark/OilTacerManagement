@@ -81,7 +81,7 @@
       </el-table-column>
     </el-table>
     <Form></Form>
-    <el-button type="primary" @click="changeVisiable">添加数据</el-button>
+    <el-button type="primary" @click="changeOneSegFormVisiable">添加数据</el-button>
   </div>
 </template>
   
@@ -220,8 +220,8 @@ export default {
     filterHandler2(value, row, column) {
       return row.segment === value;
     },
-    changeVisiable() {
-      PubSub.publish("showForm");
+    changeOneSegFormVisiable() {
+      PubSub.publish("showOneSegForm",this.$route.query.segment_number);
     },
   },
   mounted() {},

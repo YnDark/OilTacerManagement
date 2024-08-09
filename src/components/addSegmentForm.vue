@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- Form -->
-        <el-dialog title="修改段信息" :visible.sync="dialogFormVisible">
+        <el-dialog title="添加段" :visible.sync="dialogFormVisible">
             <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="150px" class="demo-ruleForm">
 
             <el-form-item label="段号" prop="segment" >
@@ -94,14 +94,14 @@ import PubSub from 'pubsub-js';
         dialogTableVisible: false,
         dialogFormVisible: false,
         ruleForm: {
-          oilName:"",
+        oilName:"",
           segment:"",
           waterVolume:"",
           oilVolume:"",
           oilEffective:"",
           waterEffective:""
         },
-        isInput:true,
+        isInput:false,
         formLabelWidth: '120px',
         //校验规则
         rules: {
@@ -139,29 +139,29 @@ import PubSub from 'pubsub-js';
                 water_effective_content:this.ruleForm.waterEffective.toString(),
             }
             //是否存在重复校验
-            // for(let i in this.$store.state.activity.segmentData){
-            //   if(this.$store.state.activity.data[i].segment.toString() === this.ruleForm.segment.toString()){
-            //     this.$message.error('已经存在相同段号的数据，请删除后再更新')
-            //     return false;
-            //   }
-            // }
-            for(let i of this.$store.state.activity.segmentData){
-              if(i.segment_number === newobj.segment_number){
-                i.segment_name = newobj.segment_name;
-                i.oil_all = this.ruleForm.oilVolume;
-                i.water_all = this.ruleForm.waterVolume;
-                i.oil_effective_content = this.ruleForm.oilEffective;
-                i.water_effective_content = this.ruleForm.waterEffective;
+            for(let i in this.$store.state.activity.segmentData){
+              if(this.$store.state.activity.data[i].segment.toString() === this.ruleForm.segment.toString()){
+                this.$message.error('已经存在相同段号的数据，请确保没有重复段号')
+                return false;
               }
             }
+            // for(let i of this.$store.state.activity.segmentData){
+            //   if(i.segment_number === newobj.segment_number){
+            //     i.segment_name = newobj.segment_name;
+            //     i.oil_all = this.ruleForm.oilVolume;
+            //     i.water_all = this.ruleForm.waterVolume;
+            //   }
+            // }
             // this.$store.state.activity.segmentData.push(newobj);
 
-            //数据库更新
+            this.$store.state.activity.segmentData.push(newobj);
+
+            //数据库添加
             this.$message({
               message:'添加成功',
               type: 'success'
             });
-            axios.post('http://localhost:8002/updateSegmentData',{
+            axios.post('http://localhost:8002/addSegment',{
               params:{
                 segment_number:this.ruleForm.segment.toString(),
                 segment_name:this.ruleForm.oilName.toString(),
@@ -196,15 +196,16 @@ import PubSub from 'pubsub-js';
       }
     },
     mounted(){
-    PubSub.subscribe("showSegmentForm",(e,segData)=>{
-        this.ruleForm.segment = segData.segment_number;
-        this.ruleForm.oilName = segData.segment_name;
-        this.ruleForm.oilVolume = segData.oil_all;
-        this.ruleForm.waterVolume = segData.water_all;
-        this.ruleForm.oilEffective = segData.oil_effective_content;
-        this.ruleForm.waterEffective = segData.water_effective_content;
-        this.dialogFormVisible = !this.dialogFormVisible ;
-      });
+        PubSub.subscribe("showAddSegmentForm",(e)=>{
+            this.ruleForm.segment = "";
+            this.ruleForm.oilName = "";
+            this.ruleForm.oilVolume = "";
+            this.ruleForm.waterVolume = "";
+            this.ruleForm.oilEffective = "";
+            this.ruleForm.waterEffective = "";
+            this.dialogFormVisible = !this.dialogFormVisible ;
+            console.log(this.dialogFormVisible);
+        });
     }
   };
 </script>

@@ -5,12 +5,45 @@
   </template>
   
   <script>
+  import axios from 'axios';
   import moment from 'moment';
   export default {
-    name: 'Setting',
+    name: 'LineByDay',
     components: {
     },
     mounted(){
+      Promise.all([
+      new Promise((resolve) =>{
+        //获取全部数据
+        axios.get('http://localhost:8002/info').then((res)=>{
+          resolve(res.data);
+          console.log(res.data);
+        }).catch(function(error){
+          console.log(error);
+        });
+      }),
+      new Promise((resolve) =>{
+        //获取全部日期
+        axios.get('http://localhost:8002/date').then((res)=>{
+          resolve(res.data);
+        }).catch(function(error){
+          console.log(error);
+        });
+      }),
+      new Promise((resolve) =>{
+        //获取全部段号
+        axios.get('http://localhost:8002/segment').then((res)=>{
+          console.log(res.data);
+          resolve(res.data);
+        }).catch(function(error){
+          console.log(error);
+        });
+      }),]).then(res=>{
+        this.$store.state.activity.data = res[0];
+        this.$store.state.activity.date = res[1];
+        this.$store.state.activity.segment = res[2];
+        console.log(res);
+      })
       //总数据
       let series = [];//
   
@@ -82,6 +115,16 @@
               lineHeight:100,
               fontSize: 20,
               fontWeight:'bolder'
+            },
+            axisTick: {
+              show: true,    // 是否显示坐标轴刻度
+              inside: true,     // 坐标轴刻度是否朝内，默认朝外
+              length: 15,    //坐标轴刻度的长度        
+              lineStyle: {
+                color: 'black',     //刻度线的颜色
+                width: 2,    //坐标轴刻度线宽
+                type: 'solid',    //坐标轴线线的类型（solid实线类型；dashed虚线类型；dotted点状类型）
+              },
             },
             axisLabel: {
               lineHeight: 25,

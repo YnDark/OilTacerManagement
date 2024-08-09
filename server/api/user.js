@@ -6,7 +6,10 @@ const {
     deleteData,
     getSegment,
     getDate,
-    selectSegmentData} = require('../database/api')
+    selectSegmentData,
+    deleteSegment,
+    updateSegmentData,
+    addSegment} = require('../database/api')
 const express = require('express');
 const db = require('mssql');
 const router = express.Router();
@@ -71,7 +74,6 @@ router.post("/insert",urlencodedParser,function(req,res){
     const date = req.body.params.Date;
     const waterMess = req.body.params.WaterMess;
     const oilMess = req.body.params.OilMess;
-    const oilName = req.body.params.OilName;
     let year = new Date(date).getFullYear().toString();
     let month = (new Date(date).getMonth() + 1).toString();
     let strDate = new Date(date).getDate().toString();
@@ -85,10 +87,9 @@ router.post("/insert",urlencodedParser,function(req,res){
         date:allDate,
         waterMess:waterMess,
         oilMess:oilMess,
-        oilName:oilName
     }
     console.log(obj)
-    console.log(`insert into oildata(WaterCol,oilCol,segment,Date,WaterMess,OilMess,OilName) values('${obj.waterCol}','${obj.oilCol}','${obj.segment}','${obj.date}','${obj.waterMess}','${obj.oilMess}','${obj.oilName}')`);
+    console.log(`insert into oildata(WaterCol,oilCol,segment,Date,WaterMess,OilMess) values('${obj.waterCol}','${obj.oilCol}','${obj.segment}','${obj.date}','${obj.waterMess}','${obj.oilMess}')`);
     insertData(obj).then(response=>{
         res.send({
             status:0,
@@ -167,14 +168,68 @@ router.post("/updateSegmentData",urlencodedParser,function(req,res){
     const segment_name = req.body.params.segment_name;
     const oil_all = req.body.params.oil_all;
     const water_all = req.body.params.water_all;
+    const oil_effective_content = req.body.params.oil_effective_content;
+    const water_effective_content = req.body.params.water_effective_content;
     const obj = {
         water_all:water_all,
         segment_number:segment_number,
         segment_name:segment_name,
-        oil_all:oil_all
+        oil_all:oil_all,
+        oil_effective_content: oil_effective_content,
+        water_effective_content:water_effective_content
     }
     console.log(obj)
-    updateData(obj).then(response=>{
+    updateSegmentData(obj).then(response=>{
+        res.send({
+            status:0,
+            msg:"请求成功",
+            data:req.body
+        });
+    }).catch(err=>{                                                                                                                                                                                                                                                                                                                                                                                                                 
+        res.send(err);
+        console.log(err);
+    });
+});
+//删除某段
+router.post("/deleteSegment",urlencodedParser,function(req,res){
+    console.log('deleteSegment');
+    console.log(req.body);
+    const segment_number = req.body.params.segment_number;
+    const obj = {
+        segment_number:segment_number,
+    }
+    console.log(obj)
+    deleteSegment(obj).then(response=>{
+        res.send({
+            status:0,
+            msg:"请求成功",
+            data:req.body
+        });
+    }).catch(err=>{                                                                                                                                                                                                                                                                                                                                                                                                                 
+        res.send(err);
+        console.log(err);
+    });
+});
+//添加段
+router.post("/addSegment",urlencodedParser,function(req,res){
+    console.log('addSegment');
+    console.log(req.body);
+    const segment_number = req.body.params.segment_number;
+    const segment_name = req.body.params.segment_name;
+    const oil_all = req.body.params.oil_all;
+    const water_all = req.body.params.water_all;
+    const oil_effective_content = req.body.params.oil_effective_content;
+    const water_effective_content = req.body.params.water_effective_content;
+    const obj = {
+        segment_number:segment_number,
+        segment_name:segment_name,
+        oil_all:oil_all,
+        water_all:water_all,
+        oil_effective_content: oil_effective_content,
+        water_effective_content:water_effective_content
+    }
+    console.log(obj)
+    addSegment(obj).then(response=>{
         res.send({
             status:0,
             msg:"请求成功",

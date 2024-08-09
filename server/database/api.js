@@ -42,7 +42,7 @@ const getSegment = () => {
 //添加
 const insertData = (obj) => {
   return new Promise((resolve,reject) => {
-    connection.query(`insert into oildata(WaterCol,oilCol,segment,Date,WaterMess,OilMess,OilName) values('${obj.waterCol}','${obj.oilCol}','${obj.segment}','${obj.date}','${obj.waterMess}','${obj.oilMess}','${obj.oilName}')`,(err,data) => {
+    connection.query(`insert into oildata(WaterCol,oilCol,segment,Date,WaterMess,OilMess) values('${obj.waterCol}','${obj.oilCol}','${obj.segment}','${obj.date}','${obj.waterMess}','${obj.oilMess}')`,(err,data) => {
       //如果err为null则成功
       if(err!=null) reject(err);
       resolve(data)
@@ -80,8 +80,29 @@ const selectSegmentData = (obj) => {
 //更新段信息
 const updateSegmentData = (obj) => {
   return new Promise((resolve,reject) => {
-    connection.query(`update segmet_data as s oildata as o set s.segment_name = ${obj.segment_name},s.segment_number = ${obj.segment_number}
-                      ,s.oil_all = ${obj.oil_all},s.water_all = ${obj.water_all},o.segment = ${obj.segment} where ${obj.segment_name} = s.segment_name and ${obj.segment_name} = o.segment`,(err,data) => {
+    connection.query(`update segment_data set segment_name = '${obj.segment_name}',segment_number = ${obj.segment_number},oil_all = ${obj.oil_all},water_all = ${obj.water_all},oil_effective_content = ${obj.oil_effective_content},water_effective_content = ${obj.water_effective_content}where segment_number = ${obj.segment_number}`,(err,data) => {
+      if(err!=null) reject(err);
+      resolve(data)
+    })
+  })
+}
+//删除某段
+const deleteSegment = (obj) => {
+  return new Promise((resolve,reject) => {
+    connection.query(`DELETE oildata FROM oildata WHERE oildata.segment = ${obj.segment_number}`,(err,data) => {
+      if(err!=null) reject(err);
+        resolve(data)
+    })
+    connection.query(`DELETE segment_data FROM segment_data WHERE segment_data.segment_number = ${obj.segment_number}`,(err,data) => {
+      if(err!=null) reject(err);
+        resolve(data)
+    })
+  })
+}
+//添加段
+const addSegment = (obj) => {
+  return new Promise((resolve,reject) => {
+    connection.query(`insert into segment_data (segment_number,segment_name,oil_all,water_all,oil_effective_content,water_effective_content) values (${obj.segment_number},${obj.segment_name},${obj.oil_all},${obj.water_all},${obj.oil_effective_content},${obj.water_effective_content})`,(err,data) => {
       if(err!=null) reject(err);
       resolve(data)
     })
@@ -96,5 +117,7 @@ module.exports = {
   getDate,
   getSegment,
   selectSegmentData,
-  updateSegmentData
+  updateSegmentData,
+  deleteSegment,
+  addSegment
 }

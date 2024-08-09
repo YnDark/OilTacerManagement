@@ -10,6 +10,7 @@ import WaterLineByColDay from './WaterLineByColDay.vue'
 import WaterLineByMessDay from './WaterLineByMessDay.vue'
 import WaterLineByVDay from './WaterLineByVDay.vue'
 import OneSegData from './OneSegData.vue'
+import home from './home.vue'
 
 const originalPush = VueRouter.prototype.push
 const originalReplace = VueRouter.prototype.replace
@@ -57,6 +58,7 @@ const router = new VueRouter({
         {name:"WaterLineByMessDay",path:'/Setting/WaterLineByMessDay',component:WaterLineByMessDay},
         {name:"WaterLineByVDay",path:'/Setting/WaterLineByVDay',component:WaterLineByVDay},
         {name:"OneSegData",path:'/ActivityAudit/OneSegData',component:OneSegData},
+        {name:"Home",path:'/home',component:home},
     ],
     mode: 'history'
 });
